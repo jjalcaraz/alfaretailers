@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Property Owner entity
+model PropertyOwner {
+  id               String   @id @default(cuid())
+  firstName        String
+  lastName         String
+  email            String   @unique
+  phone            String?
+  preferredContact String?  @default("email")
+  address          String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  status           String   @default("lead") // lead, active, inactive
+
+  // Relations
+  properties       Property[]
+
+  @@map("property_owners")
+}
+
+// Property entity
+model Property {
+  id                      String    @id @default(cuid())
+  ownerId                 String
+  title                   String
+  address                 String
+  city                    String
+  state                   String
+  zipCode                 String
+  coordinatesLat          Float?
+  coordinatesLng          Float?
+  type                    String    // apartment, house, condo, townhouse, villa
+  bedrooms                Int
+  bathrooms               Float
+  squareFootage           Int?
+  amenities               String[]  // pool, wifi, parking, etc.
+  description             String?
+  photos                  String[]  // array of URLs
+  currentListPrice        Float?
+  daysOnMarket            Int?
+  estimatedShortTermIncome Float?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  status                  String    @default("submitted") // submitted, reviewing, approved, rejected, active
+
+  // Relations
+  owner                   PropertyOwner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  application             Application?
+  propertyPhotos          PropertyPhoto[]
+
+  @@map("properties")
+}
+
+// Application entity
+model Application {
+  id                   String   @id @default(cuid())
+  propertyId           String   @unique
+  submittedAt          DateTime @default(now())
+  reviewedAt           DateTime?
+  reviewerId           String?
+  notes                String?
+  status               String   @default("pending") // pending, approved, rejected, more_info_needed
+  estimatedMonthlyIncome Float?
+  setupFee             Float?
+  managementFeePercent Float    @default(20.0)
+  documents            String[] // array of file URLs
+
+  // Relations
+  property             Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("applications")
+}
+
+// Admin User entity
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  role         String   @default("admin") // admin, manager
+  permissions  String[]
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+
+  @@map("admin_users")
+}
+
+// Market Data for income calculator
+model MarketData {
+  id                 String   @id @default(cuid())
+  city               String
+  state              String
+  averageDailyRate   Float
+  occupancyRate      Float
+  seasonalAdjustments Json?    // JSON object for seasonal multipliers
+  lastUpdated        DateTime @default(now())
+
+  @@unique([city, state])
+  @@map("market_data")
+}
+
+// Email Logs for tracking
+model EmailLog {
+  id         String   @id @default(cuid())
+  to         String
+  template   String
+  variables  Json?    // JSON object for template variables
+  sentAt     DateTime @default(now())
+  openedAt   DateTime?
+  clickedAt  DateTime?
+
+  @@map("email_logs")
+}
+
+// Property Photos
+model PropertyPhoto {
+  id          String   @id @default(cuid())
+  propertyId  String
+  url         String
+  caption     String?
+  order       Int
+  uploadedAt  DateTime @default(now())
+
+  // Relations
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_photos")
+}
