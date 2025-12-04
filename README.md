@@ -48,7 +48,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## 🛠 Tech Stack
 
 - **Framework**: [Next.js 14](https://nextjs.org/)
-- **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
+- **Database**: [Neon](https://neon.tech/) (PostgreSQL) - Free tier
+  - Alternatives: PlanetScale (MySQL), Turso (SQLite), Supabase (if account available)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Components**: [Shadcn/ui](https://ui.shadcn.com/)
 - **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
