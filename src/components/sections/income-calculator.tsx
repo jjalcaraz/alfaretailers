@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Calculator, TrendingUp, Home, BedDouble } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { AnimatedSection, AnimatedContainer, AnimatedItem } from '@/components/ui/animations'
 
 const propertyTypes = [
   { value: 'apartment', label: 'Apartment', basePrice: 120 },

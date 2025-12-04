@@ -8,41 +8,44 @@ const steps = [
   {
     number: 1,
     icon: FileText,
-    title: "Apply",
-    description: "Submit your property details for a free evaluation",
+    title: "Free Analysis",
+    description: "Discover your property's true income potential in minutes",
     details: [
-      "Simple online application",
-      "Property information upload",
-      "No obligation or commitment",
-      "Response within 48 hours"
+      "5-minute online application",
+      "Instant income estimate",
+      "No cost or obligation",
+      "Personalized consultation within 24 hours"
     ],
-    color: "bg-brand-blue"
+    color: "bg-brand-blue",
+    benefit: "See exactly how much you could be earning"
   },
   {
     number: 2,
     icon: BarChart3,
-    title: "Evaluate",
-    description: "We analyze your property's potential and create strategy",
+    title: "Custom Strategy",
+    description: "We create a data-driven plan to maximize your revenue",
     details: [
-      "Market analysis and pricing strategy",
-      "Income projection report",
-      "Optimization recommendations",
-      "Custom management plan"
+      "Local market analysis & competitive pricing",
+      "Detailed monthly income projections",
+      "Optimization recommendations for your property",
+      "Risk assessment & management plan"
     ],
-    color: "bg-brand-green"
+    color: "bg-brand-green",
+    benefit: "Average clients see 42% higher monthly income"
   },
   {
     number: 3,
     icon: Rocket,
-    title: "Launch",
-    description: "We list and manage your property on Airbnb and other platforms",
+    title: "Launch & Earn",
+    description: "We handle everything while you collect higher rent",
     details: [
-      "Professional photography",
-      "Listing creation and optimization",
-      "Guest communication",
-      "Cleaning and maintenance coordination"
+      "Professional listing photography & copywriting",
+      "Multi-platform listing (Airbnb, VRBO, etc.)",
+      "24/7 guest communication & support",
+      "Cleaning, maintenance & turnover management"
     ],
-    color: "bg-brand-orange"
+    color: "bg-brand-orange",
+    benefit: "Start earning in as little as 14 days"
   }
 ]
 
@@ -52,11 +55,14 @@ export function HowItWorks() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
+          <div className="inline-block bg-brand-orange/10 text-brand-orange px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            3-Step Process
+          </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            How It Works
+            From Empty Property to <span className="text-brand-orange"> Profit Machine</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            From stagnant listing to profitable short-term rental in 3 simple steps
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Stop losing $3,200+ every month on vacant properties. Our proven system turns your empty rental into a high-income asset in under 21 days—completely hands-free for you.
           </p>
         </div>
 
@@ -85,7 +91,7 @@ export function HowItWorks() {
                 </p>
 
                 {/* Step Details */}
-                <ul className="space-y-3">
+                <ul className="space-y-3 mb-4">
                   {step.details.map((detail, idx) => (
                     <li key={idx} className="flex items-start">
                       <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
@@ -93,6 +99,13 @@ export function HowItWorks() {
                     </li>
                   ))}
                 </ul>
+
+                {/* Key Benefit */}
+                <div className="bg-gradient-to-r from-brand-orange/10 to-brand-blue/10 rounded-lg p-3 text-center">
+                  <p className="text-sm font-semibold text-gray-900">
+                    {step.benefit}
+                  </p>
+                </div>
 
                 {/* Connector Line */}
                 {index < steps.length - 1 && (
