@@ -16,8 +16,8 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70 z-10" />
         <img
-          src="https://images.unsplash.com/photo-1580216442929-3d87ca94e6dd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
-          alt="Beautiful modern living room with elegant furnishings"
+          src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+          alt="Beautiful modern property with stunning views"
           className={`w-full h-full object-cover transition-opacity duration-1000 ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
