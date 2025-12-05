@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { saveApplication, ApplicationData } from '@/lib/database'
+import { emailService } from '@/lib/email'
 
 // Validation schema using Zod
 const applicationSchema = z.object({
@@ -134,23 +135,26 @@ function createApplicationEmail(data: any) {
   `
 }
 
-// Simple email sending function (for now, just log to console)
+// Enhanced email sending function using our email service
 async function sendApplicationEmail(data: any) {
-  // In a real implementation, you would use a service like Resend, SendGrid, etc.
-  // For now, we'll just log the email to the console
-  console.log('📧 APPLICATION EMAIL TEMPLATE:')
-  console.log(createApplicationEmail(data))
+  try {
+    const subject = `🎯 HOT LEAD: New Application - ${data.firstName} ${data.lastName}`;
+    const html = createApplicationEmail(data);
 
-  // TODO: Integrate with email service
-  // const resend = new Resend(process.env.RESEND_API_KEY);
-  // await resend.emails.send({
-  //   from: 'applications@alfaretailers.com',
-  //   to: 'info@alfaretailers.com',
-  //   subject: `New Property Application - ${data.firstName} ${data.lastName}`,
-  //   html: createApplicationEmail(data),
-  // });
+    const result = await emailService.sendEmail({
+      to: 'info@alfaretailers.com',
+      subject,
+      html,
+    });
 
-  return { success: true, message: 'Email logged to console (implement actual email service)' }
+    return result;
+  } catch (error) {
+    console.error('Error sending application email:', error);
+    return {
+      success: false,
+      message: `Failed to send application email: ${error instanceof Error ? error.message : 'Unknown error'}`
+    };
+  }
 }
 
 // Mock database save function (replace with actual Prisma calls)
