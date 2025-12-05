@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Home, TrendingUp, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -9,6 +9,26 @@ import { AnimatedSection, AnimatedContainer, AnimatedItem } from '@/components/u
 
 export function Hero() {
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [useFallback, setUseFallback] = useState(false)
+
+  // Fallback image URLs - local first, then remote
+  const localImage = '/images/hero-bg-livingroom.jpg'
+  const remoteImage = 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80'
+  const currentImage = useFallback ? remoteImage : localImage
+
+  // Handle image load error and switch to fallback
+  const handleImageError = () => {
+    if (!useFallback) {
+      setUseFallback(true)
+      setImageLoaded(false)
+    }
+  }
+
+  // Reset fallback state when component re-renders
+  useEffect(() => {
+    setUseFallback(false)
+    setImageLoaded(false)
+  }, [])
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -16,12 +36,18 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70 z-10" />
         <img
-          src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+          src={currentImage}
           alt="Beautiful modern property with stunning views"
           className={`w-full h-full object-cover transition-opacity duration-1000 ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           onLoad={() => setImageLoaded(true)}
+          onError={handleImageError}
+          // Add cache-busting for remote image only
+          {...(useFallback && {
+            src: `${remoteImage}&t=${Date.now()}`,
+            crossOrigin: 'anonymous'
+          })}
         />
         {/* Overlay gradient for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
@@ -45,8 +71,30 @@ export function Hero() {
           </p>
         </AnimatedSection>
 
-        {/* Value Proposition */}
+        {/* Early CTA Button */}
         <AnimatedSection animation="slideUp" delay={0.5}>
+          <div className="flex justify-center mb-8">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-brand-purple to-brand-blue hover:from-brand-purple/90 hover:to-brand-blue/90 text-white font-semibold text-lg px-8 py-6 h-auto group shadow-xl"
+                asChild
+              >
+                <Link href="/how-it-works">
+                  See How It Works
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
+        </AnimatedSection>
+
+        {/* Value Proposition */}
+        <AnimatedSection animation="slideUp" delay={0.6}>
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 max-w-2xl mx-auto">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-white">
               <div className="flex items-center">
@@ -68,7 +116,7 @@ export function Hero() {
         </AnimatedSection>
 
         {/* CTA Buttons */}
-        <AnimatedSection animation="slideUp" delay={0.6}>
+        <AnimatedSection animation="slideUp" delay={0.7}>
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-12">
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -82,23 +130,6 @@ export function Hero() {
               >
                 <Link href="/apply">
                   Calculate Your Potential Income
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Button
-                size="lg"
-                className="bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold text-lg px-8 py-6 h-auto group shadow-xl"
-                asChild
-              >
-                <Link href="/how-it-works">
-                  See How It Works
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
