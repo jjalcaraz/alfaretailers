@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Home, TrendingUp, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,6 @@ import Link from 'next/link'
 import { AnimatedSection, AnimatedContainer, AnimatedItem } from '@/components/ui/animations'
 
 export function Hero() {
-  const [imageLoaded, setImageLoaded] = useState(false)
   const [useFallback, setUseFallback] = useState(false)
 
   // Fallback image URLs - local first, then remote
@@ -18,17 +17,12 @@ export function Hero() {
 
   // Handle image load error and switch to fallback
   const handleImageError = () => {
+    console.log('Image load error, switching to fallback')
     if (!useFallback) {
       setUseFallback(true)
-      setImageLoaded(false)
     }
   }
 
-  // Reset fallback state when component re-renders
-  useEffect(() => {
-    setUseFallback(false)
-    setImageLoaded(false)
-  }, [])
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -38,10 +32,7 @@ export function Hero() {
         <img
           src={currentImage}
           alt="Beautiful modern property with stunning views"
-          className={`w-full h-full object-cover transition-opacity duration-1000 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          onLoad={() => setImageLoaded(true)}
+          className="w-full h-full object-cover opacity-100"
           onError={handleImageError}
           // Add cache-busting for remote image only
           {...(useFallback && {
@@ -225,6 +216,7 @@ export function Hero() {
           </div>
         </AnimatedContainer>
 
+        
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <div className="animate-bounce">

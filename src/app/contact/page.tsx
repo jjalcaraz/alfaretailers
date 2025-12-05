@@ -34,7 +34,6 @@ export default function Contact() {
                 description="Fill out the form below and we'll get back to you within 24 hours."
                 showPropertyFields={false}
               />
-            </div>
 
               {/* Contact Information */}
               <div>
