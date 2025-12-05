@@ -90,7 +90,6 @@ export const metadata: Metadata = {
     'application-name': 'Alfa Retailers',
     'msapplication-config': '/browserconfig.xml',
     'mobile-web-app-capable': 'yes',
-    'apple-touch-fullscreen': 'yes',
   },
   // Viewport and additional meta
   viewport: {

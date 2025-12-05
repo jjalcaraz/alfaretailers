@@ -79,7 +79,7 @@ export const baseMetadata: Metadata = {
 export const pageMetadata: Record<string, Metadata> = {
   home: {
     ...baseMetadata,
-    title: baseMetadata.title?.default,
+    title: 'Alfa Retailers - Transform Your Empty Rental into a Profit Machine | 42% More Income',
     description: baseMetadata.description,
   },
   'how-it-works': {
