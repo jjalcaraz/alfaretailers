@@ -1,0 +1,53 @@
+{
+  "name": "Alfa Retailers - Property Management Services",
+  "short_name": "Alfa Retailers",
+  "description": "Transform your empty rental into a profit machine with professional short-term rental management",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "categories": ["business", "finance", "productivity"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/images/logo-alfa.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/logo-alfa.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Apply Now",
+      "short_name": "Apply",
+      "description": "Start your property management application",
+      "url": "/apply",
+      "icons": [{ "src": "/images/logo-alfa.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "How It Works",
+      "short_name": "Process",
+      "description": "Learn about our management process",
+      "url": "/how-it-works",
+      "icons": [{ "src": "/images/logo-alfa.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/hero-bg-livingroom.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Alfa Retailers property management platform"
+    }
+  ]
+}

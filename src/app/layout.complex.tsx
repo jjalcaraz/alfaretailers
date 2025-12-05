@@ -80,24 +80,6 @@ export const metadata: Metadata = {
   verification: {
     google: 'your-google-verification-code',
   },
-  // Additional SEO meta tags
-  other: {
-    'theme-color': '#2563eb',
-    'msapplication-TileColor': '#2563eb',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'Alfa Retailers',
-    'application-name': 'Alfa Retailers',
-    'msapplication-config': '/browserconfig.xml',
-    'mobile-web-app-capable': 'yes',
-    'apple-touch-fullscreen': 'yes',
-  },
-  // Viewport and additional meta
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
 }
 
 export default function RootLayout({

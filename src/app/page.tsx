@@ -5,6 +5,10 @@ import { IncomeCalculator } from '@/components/sections/income-calculator'
 import { FAQ } from '@/components/sections/faq'
 import { SocialProof } from '@/components/ui/social-proof'
 import { StickyCTA } from '@/components/ui/sticky-cta'
+import { Metadata } from 'next'
+import { pageMetadata } from './metadata'
+
+export const metadata: Metadata = pageMetadata.home
 
 export default function Home() {
   return (
