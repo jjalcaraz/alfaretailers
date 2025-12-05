@@ -49,7 +49,7 @@ function createApplicationEmail(data: any) {
 <html>
 <head>
     <meta charset="utf-8">
-    <title>New Property Application - AlfaRetailers</title>
+    <title>New Property Application - Alfa Retailers</title>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .header { background: #2563eb; color: white; padding: 20px; text-align: center; }
@@ -65,7 +65,7 @@ function createApplicationEmail(data: any) {
 <body>
     <div class="header">
         <h1>🏠 New Property Application Received</h1>
-        <p>AlfaRetailers - Property Co-listing Service</p>
+        <p>Alfa Retailers - Property Co-listing Service</p>
     </div>
 
     <div class="content">
@@ -127,7 +127,7 @@ function createApplicationEmail(data: any) {
 
     <div style="background: #1f2937; color: white; padding: 20px; text-align: center;">
         <p><strong>Application received on:</strong> ${new Date().toLocaleString()}</p>
-        <p>AlfaRetailers Property Management</p>
+        <p>Alfa Retailers Property Management</p>
     </div>
 </body>
 </html>
@@ -145,7 +145,7 @@ async function sendApplicationEmail(data: any) {
   // const resend = new Resend(process.env.RESEND_API_KEY);
   // await resend.emails.send({
   //   from: 'applications@alfaretailers.com',
-  //   to: 'leads@alfaretailers.com',
+  //   to: 'info@alfaretailers.com',
   //   subject: `New Property Application - ${data.firstName} ${data.lastName}`,
   //   html: createApplicationEmail(data),
   // });

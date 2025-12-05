@@ -69,7 +69,7 @@ export function Hero() {
 
         {/* CTA Buttons */}
         <AnimatedSection animation="slideUp" delay={0.6}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-12">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -93,13 +93,30 @@ export function Hero() {
               transition={{ duration: 0.2 }}
             >
               <Button
-                variant="outline"
                 size="lg"
-                className="border-white text-white hover:bg-white hover:text-gray-900 font-semibold text-lg px-8 py-6 h-auto"
+                className="bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold text-lg px-8 py-6 h-auto group shadow-xl"
                 asChild
               >
                 <Link href="/how-it-works">
                   See How It Works
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Button
+                size="lg"
+                className="bg-brand-green hover:bg-brand-green/90 text-white font-semibold text-lg px-8 py-6 h-auto group shadow-xl"
+                asChild
+              >
+                <Link href="/contact">
+                  Contact Our Team
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </motion.div>

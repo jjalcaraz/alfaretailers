@@ -47,11 +47,15 @@ export function Header() {
       }`}
     >
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-white transition-colors">
-              AlfaRetailers
+            <span className="inline-flex items-center justify-center rounded-md bg-slate-900/70 border border-amber-200/50 shadow-[0_6px_18px_rgba(0,0,0,0.25)] px-[1px] py-[1px]">
+              <img
+                src="/images/logo-alfa.png"
+                alt="Alfa Retailers"
+                className="h-16 sm:h-18 w-auto object-contain"
+              />
             </span>
           </Link>
 
@@ -134,7 +138,7 @@ export function Header() {
               <div className="px-3 py-3 text-sm text-slate-200/80 border-t border-white/5">
                 <div className="flex items-center">
                   <Phone className="h-4 w-4 mr-2 text-brand-orange" />
-                  <span className="font-medium">Call: (555) 123-4567</span>
+                  <span className="font-medium">Call: 210-526-1401</span>
                 </div>
               </div>
             </div>

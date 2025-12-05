@@ -72,7 +72,7 @@ Your free Neon tier includes:
 - ⚡ 100 concurrent connections
 - 🆓 3 projects total
 
-**For AlfaRetailers MVP:**
+**For Alfa Retailers MVP:**
 - Est. storage: 50-100MB (plenty of room)
 - Est. data transfer: 100MB/month (well under limits)
 - Est. concurrent users: 10-20 (comfortable)

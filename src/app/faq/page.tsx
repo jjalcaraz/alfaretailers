@@ -15,7 +15,7 @@ const faqCategories = [
     color: 'bg-brand-blue',
     questions: [
       {
-        question: 'How do I get started with AlfaRetailers?',
+        question: 'How do I get started with Alfa Retailers?',
         answer: 'Getting started is easy! Simply fill out our online application form with your property details. We\'ll review your information and provide a free, no-obligation analysis within 48 hours. If you decide to move forward, we\'ll handle everything from photography to listing creation.'
       },
       {
@@ -286,7 +286,7 @@ export default function FAQ() {
                 Ready to Get Started?
               </h3>
               <p className="text-white/90 mb-6 max-w-2xl mx-auto">
-                Join 50+ property owners who are already earning more with AlfaRetailers. Get your free analysis today.
+                Join 50+ property owners who are already earning more with Alfa Retailers. Get your free analysis today.
               </p>
               <Button
                 size="lg"

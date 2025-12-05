@@ -12,7 +12,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <h3 className="text-2xl font-bold text-brand-blue mb-4">
-              AlfaRetailers
+              Alfa Retailers
             </h3>
             <p className="text-gray-400 mb-6 leading-relaxed">
               Transform your stagnant long-term rental into a profitable short-term rental.
@@ -110,18 +110,18 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-center text-gray-400">
                 <Phone className="h-5 w-5 mr-3 text-brand-orange" />
-                <span>(555) 123-4567</span>
+                <span>210-526-1401</span>
               </div>
               <div className="flex items-center text-gray-400">
                 <Mail className="h-5 w-5 mr-3 text-brand-orange" />
-                <span>leads@alfaretailers.com</span>
+                <span>info@alfaretailers.com</span>
               </div>
               <div className="flex items-start text-gray-400">
                 <MapPin className="h-5 w-5 mr-3 text-brand-orange mt-0.5" />
                 <span className="text-sm">
-                  123 Business Ave<br />
-                  Suite 100<br />
-                  Miami, FL 33101
+                  Office<br />
+                  12370 Potranco Rd, Suite 207<br />
+                  San Antonio, TX 78254
                 </span>
               </div>
             </div>
@@ -144,7 +144,7 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} AlfaRetailers. All rights reserved.
+              © {currentYear} Alfa Retailers. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <Link

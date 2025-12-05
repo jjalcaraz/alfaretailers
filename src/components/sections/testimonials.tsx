@@ -13,7 +13,7 @@ const testimonials = [
     previousIncome: "$2,800/month",
     newIncome: "$4,200/month",
     increase: "+50%",
-    content: "My condo was vacant for 73 days and I was losing thousands every month. Within 2 weeks of signing up with AlfaRetailers, I had my first booking at 50% higher than my previous long-term rent. They handle everything—I just receive the higher payments.",
+    content: "My condo was vacant for 73 days and I was losing thousands every month. Within 2 weeks of signing up with Alfa Retailers, I had my first booking at 50% higher than my previous long-term rent. They handle everything—I just receive the higher payments.",
     rating: 5,
     image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
   },
@@ -35,7 +35,7 @@ const testimonials = [
     previousIncome: "$1,900/month",
     newIncome: "$2,800/month",
     increase: "+47%",
-    content: "As a first-time property owner, I was overwhelmed by the vacancy. AlfaRetailers made everything simple. The application was quick, they provided detailed income projections, and now my property earns 47% more while they manage all guest communications and operations.",
+    content: "As a first-time property owner, I was overwhelmed by the vacancy. Alfa Retailers made everything simple. The application was quick, they provided detailed income projections, and now my property earns 47% more while they manage all guest communications and operations.",
     rating: 5,
     image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
   }

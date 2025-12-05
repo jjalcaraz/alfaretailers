@@ -6,8 +6,8 @@ import { StructuredData } from '@/components/seo/structured-data'
 
 export const metadata: Metadata = {
   title: {
-    default: 'AlfaRetailers - Transform Your Empty Rental into a Profit Machine | 42% More Income',
-    template: '%s | AlfaRetailers'
+    default: 'Alfa Retailers - Transform Your Empty Rental into a Profit Machine | 42% More Income',
+    template: '%s | Alfa Retailers'
   },
   description: 'Stop losing $3,200+ monthly on vacant properties. Convert your stagnant long-term rental into a profitable short-term rental. Average clients see 42% higher income. Free analysis in 5 minutes.',
   keywords: [
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     'Miami property management',
     'Florida short-term rentals'
   ],
-  authors: [{ name: 'AlfaRetailers' }],
-  creator: 'AlfaRetailers',
-  publisher: 'AlfaRetailers',
+  authors: [{ name: 'Alfa Retailers' }],
+  creator: 'Alfa Retailers',
+  publisher: 'Alfa Retailers',
   formatDetection: {
     email: false,
     address: false,
@@ -41,24 +41,24 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://alfaretailers.com',
-    title: 'AlfaRetailers - Transform Your Empty Rental into a Profit Machine | 42% More Income',
+    title: 'Alfa Retailers - Transform Your Empty Rental into a Profit Machine | 42% More Income',
     description: 'Stop losing $3,200+ monthly on vacant properties. Average clients see 42% higher income with our proven short-term rental management system.',
-    siteName: 'AlfaRetailers',
+    siteName: 'Alfa Retailers',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'AlfaRetailers - Property Management Services',
+        alt: 'Alfa Retailers - Property Management Services',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AlfaRetailers - Transform Your Empty Rental into a Profit Machine',
+    title: 'Alfa Retailers - Transform Your Empty Rental into a Profit Machine',
     description: 'Stop losing $3,200+ monthly on vacant properties. Average clients see 42% higher income. Free analysis in 5 minutes.',
     images: ['/twitter-image.jpg'],
-    creator: '@AlfaRetailers',
+    creator: '@Alfa Retailers',
   },
   robots: {
     index: true,
@@ -88,7 +88,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans">
         <Header />
-        <main className="pt-16">
+        <main className="pt-20">
           {children}
         </main>
         <Footer />

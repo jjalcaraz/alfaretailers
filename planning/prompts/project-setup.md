@@ -29,7 +29,7 @@ Also create a comprehensive README with setup instructions.
 
 ## 3. Initial Database Schema
 ```
-Design and implement a Prisma schema for AlfaRetailers property management:
+Design and implement a Prisma schema for Alfa Retailers property management:
 
 Entities needed:
 - PropertyOwner (contact info, preferences)

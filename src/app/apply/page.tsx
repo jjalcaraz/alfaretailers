@@ -175,7 +175,7 @@ export default function Apply() {
                   Application Submitted Successfully!
                 </h1>
                 <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                  Thank you for your interest in AlfaRetailers! We've received your application and our team will review it within 48 hours.
+                  Thank you for your interest in Alfa Retailers! We've received your application and our team will review it within 48 hours.
                 </p>
 
                 <div className="bg-white rounded-2xl p-8 shadow-lg mb-8">

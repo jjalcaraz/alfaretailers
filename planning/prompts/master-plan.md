@@ -26,7 +26,7 @@ The primary audience is **rental property owners/landlords** (not tenants) who h
 
 I currently have a very basic hero and top navigation:
 
-- Logo **“AlfaRetailers”** in blue on the top left.
+- Logo **“Alfa Retailers”** in blue on the top left.
 - A white top bar with a **“Home”** pill button and an orange **“Get Free Analysis”** button on the right.
 - The hero headline reads: **“Your Property’s Been Sitting Empty?”** with a subheadline and a CTA button **“Get Your Free Rental Analysis”**.
 - There is also an empty input field next to the CTA and some stats underneath (properties managed, owner earnings, avg income increase).
@@ -51,7 +51,7 @@ I want you to **explicitly critique and redesign the header/navigation + hero se
   - Clean, modern layout with **strong typography**.
   - Clear sections, good use of white space.
   - Simple, direct, benefit-driven messaging.
-- I want **AlfaRetailers.com** to have a similarly **modern, trustworthy, and high-converting design**, adapted to a **property co-listing / short-term rental optimization** service.
+- I want **Alfa Retailers.com** to have a similarly **modern, trustworthy, and high-converting design**, adapted to a **property co-listing / short-term rental optimization** service.
 
 ---
 
@@ -139,7 +139,7 @@ Please:
 1. **Critique the current header/navigation** (as described above):
    - Point out specific UX/design problems (contrast, spacing, hierarchy, interaction states).
 2. Propose a new **desktop header layout**, including:
-   - Left: logo / brand (“AlfaRetailers”).
+   - Left: logo / brand (“Alfa Retailers”).
    - Center or left: navigation links (e.g., Home, How It Works, For Owners, FAQ, Contact).
    - Right: **primary CTA** button (e.g., “Get Free Analysis”) and optional **secondary CTA** (e.g., “Book a Call”).
 3. Specify:
@@ -352,7 +352,7 @@ Based on the proposed stack, recommend:
   - Integrate database, ORM, and email service.
 - Provide **several concrete prompt templates** I can reuse later, such as:
   - “Scaffold a Next.js 15 project with Tailwind, a shared layout component, and a sticky header/navigation bar with menu items [X, Y, Z] and a primary CTA button.”
-  - “Generate a responsive hero component with props for headline, subheadline, stats, and CTA, matching the AlfaRetailers color palette and typography.”
+  - “Generate a responsive hero component with props for headline, subheadline, stats, and CTA, matching the Alfa Retailers color palette and typography.”
   - “Create a Next.js route handler that accepts form data, validates it with Zod, saves it via Prisma, and sends an email using [service].”
 
 ---

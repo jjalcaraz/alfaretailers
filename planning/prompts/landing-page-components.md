@@ -2,7 +2,7 @@
 
 ## 1. Hero Section
 ```
-Create a responsive hero section component for AlfaRetailers.com:
+Create a responsive hero section component for Alfa Retailers.com:
 
 Requirements:
 - Full-width background image overlay
@@ -61,7 +61,7 @@ Requirements:
 Build an FAQ accordion section with the following questions:
 
 Questions:
-- How does AlfaRetailers make money?
+- How does Alfa Retailers make money?
 - How long does the onboarding process take?
 - Do I need to manage bookings myself?
 - What kind of properties do you work with?

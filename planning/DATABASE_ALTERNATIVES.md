@@ -1,4 +1,4 @@
-# Database Options for AlfaRetailers
+# Database Options for Alfa Retailers
 
 ## Current Situation
 - Supabase account limit reached (have dev & prod databases)
@@ -57,7 +57,7 @@ DATABASE_URL="postgresql://[user]:[password]@[neon-host]/[dbname]?sslmode=requir
 
 ## Cost Projection (Free Tier Usage)
 
-For AlfaRetailers MVP:
+For Alfa Retailers MVP:
 - **Storage**: <100MB needed (Free: 512MB)
 - **Connections**: <100 concurrent (Free: 100)
 - **Bandwidth**: <1GB/month (Free: 1GB)

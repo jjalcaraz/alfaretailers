@@ -37,7 +37,7 @@ const faqCategories = [
     color: 'bg-brand-green',
     questions: [
       {
-        q: 'How much does AlfaRetailers charge?',
+        q: 'How much does Alfa Retailers charge?',
         a: 'We work on a commission basis, typically 20-25% of rental income. No upfront fees or hidden charges.'
       },
       {
@@ -214,8 +214,7 @@ export function FAQ() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-gray-900 font-semibold"
+              className="bg-white text-brand-blue hover:bg-gray-100 font-semibold shadow-[0_10px_25px_rgba(255,255,255,0.35)]"
               asChild
             >
               <Link href="/contact">

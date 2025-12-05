@@ -146,7 +146,7 @@ export default function Contact() {
                           Phone
                         </h3>
                         <p className="text-gray-600 mb-1">
-                          (555) 123-4567
+                          210-526-1401
                         </p>
                         <p className="text-sm text-gray-500">
                           Mon-Fri: 9AM-6PM EST
@@ -165,7 +165,7 @@ export default function Contact() {
                           Email
                         </h3>
                         <p className="text-gray-600 mb-1">
-                          leads@alfaretailers.com
+                          info@alfaretailers.com
                         </p>
                         <p className="text-sm text-gray-500">
                           We respond within 24 hours
@@ -184,9 +184,9 @@ export default function Contact() {
                           Office
                         </h3>
                         <p className="text-gray-600">
-                          123 Business Ave<br />
-                          Suite 100<br />
-                          Miami, FL 33101
+                          Office<br />
+                          12370 Potranco Rd, Suite 207<br />
+                          San Antonio, TX 78254
                         </p>
                       </div>
                     </div>

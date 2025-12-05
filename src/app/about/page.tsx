@@ -15,7 +15,7 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-                About AlfaRetailers
+                About Alfa Retailers
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 We're transforming the property management industry by helping owners convert stagnant long-term rentals into profitable short-term vacation rentals.
@@ -33,7 +33,7 @@ export default function About() {
                   Our Story
                 </h2>
                 <p className="text-lg text-gray-600 mb-6">
-                  Founded in 2020, AlfaRetailers emerged from a simple observation: countless property owners were struggling with vacant properties while the short-term rental market was booming.
+                  Founded in 2020, Alfa Retailers emerged from a simple observation: countless property owners were struggling with vacant properties while the short-term rental market was booming.
                 </p>
                 <p className="text-lg text-gray-600 mb-6">
                   Our founders, experienced in both real estate and hospitality, saw an opportunity to bridge this gap. We developed a comprehensive management system that handles everything from property optimization to guest communication.
@@ -123,7 +123,7 @@ export default function About() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                Why Choose AlfaRetailers?
+                Why Choose Alfa Retailers?
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 We combine local market expertise with cutting-edge technology to deliver superior results
@@ -284,7 +284,7 @@ export default function About() {
               Ready to Transform Your Property?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Join the 50+ property owners who are already earning more with AlfaRetailers
+              Join the 50+ property owners who are already earning more with Alfa Retailers
             </p>
             <Button
               size="lg"

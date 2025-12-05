@@ -2,7 +2,7 @@
 
 ## 1. Landing Page Copywriting
 ```
-Generate compelling copy for AlfaRetailers landing page sections:
+Generate compelling copy for Alfa Retailers landing page sections:
 
 Hero Section:
 - Primary headline that addresses pain point
@@ -145,7 +145,7 @@ Create templates for case studies and testimonials:
 Case Study Structure:
 - Property overview (location, type, size)
 - Challenge (why long-term wasn't working)
-- Solution (AlfaRetailers approach)
+- Solution (Alfa Retailers approach)
 - Results (income increase, occupancy rate)
 - Owner testimonial
 - Before/after metrics
@@ -156,7 +156,7 @@ Testimonial Template:
 - Property details
 - Quote about experience
 - Specific results mentioned
-- Time with AlfaRetailers
+- Time with Alfa Retailers
 - Would recommend rating
 ```
 
@@ -206,7 +206,7 @@ Create short video content scripts:
 
 3. Owner Interview Template
    - Introduction
-   - Before AlfaRetailers situation
+   - Before Alfa Retailers situation
    - Decision process
    - After results
    - Advice for others

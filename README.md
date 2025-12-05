@@ -1,4 +1,4 @@
-# AlfaRetailers Property Co-listing Service
+# Alfa Retailers Property Co-listing Service
 
 Transform your stagnant long-term rental properties into profitable short-term rentals with our comprehensive management service.
 

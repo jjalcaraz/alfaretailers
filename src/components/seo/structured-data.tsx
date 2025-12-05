@@ -2,22 +2,22 @@ export function StructuredData() {
   const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "AlfaRetailers",
+    "name": "Alfa Retailers",
     "url": "https://alfaretailers.com",
     "logo": "https://alfaretailers.com/logo.png",
     "description": "Professional short-term rental management service that transforms vacant properties into profitable investments",
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "(555) 123-4567",
+      "telephone": "210-526-1401",
       "contactType": "customer service",
-      "email": "leads@alfaretailers.com"
+      "email": "info@alfaretailers.com"
     },
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "123 Business Ave, Suite 100",
-      "addressLocality": "Miami",
-      "addressRegion": "FL",
-      "postalCode": "33101",
+      "streetAddress": "12370 Potranco Rd, Suite 207",
+      "addressLocality": "San Antonio",
+      "addressRegion": "TX",
+      "postalCode": "78254",
       "addressCountry": "US"
     },
     "sameAs": [
@@ -41,7 +41,7 @@ export function StructuredData() {
     "description": "Complete management service for converting vacant long-term rentals into profitable short-term rentals",
     "provider": {
       "@type": "Organization",
-      "name": "AlfaRetailers"
+      "name": "Alfa Retailers"
     },
     "serviceType": "Property Management Service",
     "areaServed": {

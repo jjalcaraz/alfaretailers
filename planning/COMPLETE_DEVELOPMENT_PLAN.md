@@ -1,4 +1,4 @@
-# AlfaRetailers.com - Complete Development Plan
+# Alfa Retailers.com - Complete Development Plan
 
 Generated on: 2025-12-04
 
@@ -18,7 +18,7 @@ Generated on: 2025-12-04
 
 ## 1. Business & Goals Summary
 
-**AlfaRetailers.com** is a property co-listing service targeting property owners with stagnant long-term rental listings:
+**Alfa Retailers.com** is a property co-listing service targeting property owners with stagnant long-term rental listings:
 
 - **Primary Goal**: Convert properties from unsuccessful long-term rentals (28+ days on market) to profitable short-term rentals (Airbnb/VRBO)
 - **Target Audience**: Property owners struggling to rent their properties traditionally, seeking higher returns
@@ -53,7 +53,7 @@ Generated on: 2025-12-04
   - How It Works: 3-step visual process (Apply → Evaluate → Launch)
   - Income Calculator: Interactive tool showing potential earnings
   - Social Proof: Early testimonials (can be simulated initially)
-  - Value Proposition: Why choose AlfaRetailers over self-managing
+  - Value Proposition: Why choose Alfa Retailers over self-managing
   - CTA Section: "Get Your Free Rental Analysis"
 
 #### 2. How It Works (/how-it-works)
@@ -571,7 +571,7 @@ NEXTAUTH_URL="https://alfaretailers.com"
 
 # Email Service
 RESEND_API_KEY="..."
-FROM_EMAIL="leads@alfaretailers.com"
+FROM_EMAIL="info@alfaretailers.com"
 ADMIN_EMAIL="you@alfaretailers.com"
 
 # External APIs
@@ -734,7 +734,7 @@ Include: package.json with all dependencies, folder structure, and setup instruc
 
 #### 2. Component Generation Prompt
 ```
-Create a responsive hero section component for AlfaRetailers.com:
+Create a responsive hero section component for Alfa Retailers.com:
 
 Requirements:
 - Full-width background image overlay
@@ -772,7 +772,7 @@ Include: error handling, type definitions, and documentation.
 
 #### 4. Database Schema Prompt
 ```
-Design a Prisma schema for AlfaRetailers property management:
+Design a Prisma schema for Alfa Retailers property management:
 
 Entities needed:
 - PropertyOwner (contact info, preferences)
@@ -881,7 +881,7 @@ Create a `prompts/` directory in your project with reusable prompts:
 
 ### Step 2: Visual Shell Implementation (Day 3-5)
 1. **Create layout and navigation**
-   - Ask AI: "Build a responsive header component with navigation menu for AlfaRetailers with the following pages: Home, How It Works, About, FAQ, Contact"
+   - Ask AI: "Build a responsive header component with navigation menu for Alfa Retailers with the following pages: Home, How It Works, About, FAQ, Contact"
    - Add sticky header with CTA button
 
 2. **Implement hero section**
@@ -967,10 +967,10 @@ Create a `prompts/` directory in your project with reusable prompts:
 ### Sample AI Prompts for Each Phase
 
 #### Phase 1 Prompt:
-"Create a complete Next.js 14 starter project for AlfaRetailers.com with TypeScript, Tailwind CSS, and all necessary dependencies for a property co-listing service including Supabase, Prisma, and email functionality."
+"Create a complete Next.js 14 starter project for Alfa Retailers.com with TypeScript, Tailwind CSS, and all necessary dependencies for a property co-listing service including Supabase, Prisma, and email functionality."
 
 #### Phase 2 Prompt:
-"Build a complete landing page for AlfaRetailers with hero section, how it works, income calculator, and FAQ sections. Use Inter font, the specified color palette (primary #2563eb, accent #ea580c), and ensure mobile-first responsive design with smooth animations."
+"Build a complete landing page for Alfa Retailers with hero section, how it works, income calculator, and FAQ sections. Use Inter font, the specified color palette (primary #2563eb, accent #ea580c), and ensure mobile-first responsive design with smooth animations."
 
 #### Phase 3 Prompt:
 "Implement a multi-step property application form with: Step 1 - Property details (address autocomplete, type, bedrooms, amenities), Step 2 - Current situation (days listed, asking price), Step 3 - Owner info and photo upload. Include validation, progress indicator, and save draft functionality."
