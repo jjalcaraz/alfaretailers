@@ -8,6 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
+    "test:seo": "node scripts/seo-validator.js",
+    "test:e2e": "playwright test",
+    "test": "npm run test:seo && npm run test:e2e",
+    "validate": "node scripts/pre-deploy-check.js",
+    "pre-deploy": "npm run validate && npm run build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
@@ -43,6 +48,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
