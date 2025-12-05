@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-12-05T14:13:33.211Z",
+  "url": "https://alfaretailers.vercel.app",
+  "summary": {
+    "passed": 0,
+    "warnings": 2,
+    "failed": 7
+  },
+  "results": {
+    "passed": [],
+    "failed": [
+      "Homepage: unable to get local issuer certificate",
+      "About page: unable to get local issuer certificate",
+      "How It Works: unable to get local issuer certificate",
+      "FAQ: unable to get local issuer certificate",
+      "Contact: unable to get local issuer certificate",
+      "Application page: unable to get local issuer certificate",
+      "Applications API: unable to get local issuer certificate"
+    ],
+    "warnings": [
+      "Static assets error: /_next/static/css/ - unable to get local issuer certificate",
+      "Static assets error: /_next/static/chunks/ - unable to get local issuer certificate"
+    ]
+  }
+}
