@@ -1,12 +1,16 @@
 import { Metadata } from 'next'
 
+// Force production URL to prevent Vercel deployment URLs
+const PRODUCTION_URL = 'https://www.alfaretailers.com'
+
 // Get the absolute URL for the site (ensures www prefix)
 export function getAbsoluteUrl(path: string = ''): string {
-  let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.alfaretailers.com'
+  // Always use production URL to prevent Vercel deployment URLs in canonical tags
+  let baseUrl = PRODUCTION_URL
 
-  // Ensure the URL always has www for consistency
-  if (baseUrl.includes('://alfaretailers.com') && !baseUrl.includes('://www.alfaretailers.com')) {
-    baseUrl = baseUrl.replace('://alfaretailers.com', '://www.alfaretailers.com')
+  // Only use environment variable if it's explicitly set to our production domain
+  if (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.includes('www.alfaretailers.com')) {
+    baseUrl = process.env.NEXT_PUBLIC_SITE_URL
   }
 
   // Normalize path to avoid double slashes

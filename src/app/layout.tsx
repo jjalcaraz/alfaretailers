@@ -5,7 +5,9 @@ import { Footer } from '@/components/layout/footer'
 import { EnhancedStructuredData } from '@/components/seo/enhanced-structured-data'
 import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.alfaretailers.com'
+// Force production URL to prevent Vercel deployment URLs in canonical tags
+const PRODUCTION_URL = 'https://www.alfaretailers.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || PRODUCTION_URL
 
 export const metadata: Metadata = {
   title: {
@@ -42,14 +44,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(PRODUCTION_URL),
   alternates: {
-    canonical: siteUrl,
+    canonical: PRODUCTION_URL,
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: siteUrl,
+    url: PRODUCTION_URL,
     title: 'Alfa Retailers - Transform Your Empty Rental into a Profit Machine | 42% More Income',
     description: 'Stop losing $3,200+ monthly on vacant properties. Average clients see 42% higher income with our proven short-term rental management system.',
     siteName: 'Alfa Retailers',

@@ -2,7 +2,8 @@ import { generateLocalBusinessStructuredData, generateWebPageStructuredData, get
 
 export function EnhancedStructuredData() {
   const localBusinessData = generateLocalBusinessStructuredData()
-  const siteUrl = getAbsoluteUrl()
+  // Force production URL to prevent Vercel deployment URLs in structured data
+  const siteUrl = 'https://www.alfaretailers.com'
 
   const organizationData = {
     "@context": "https://schema.org",
