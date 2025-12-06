@@ -166,7 +166,7 @@ test.describe('SEO Validation Tests', () => {
         }
       } catch (e) {
         // If JSON parsing fails, that's an issue with the structured data
-        expect.fail('Structured data is not valid JSON');
+        throw new Error('Structured data is not valid JSON');
       }
     });
   });

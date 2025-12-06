@@ -76,7 +76,9 @@ export function PerformanceMonitor() {
       new PerformanceObserver((list) => {
         const entries = list.getEntries()
         entries.forEach((entry) => {
-          console.log('CLS:', entry.value)
+          if ('value' in entry) {
+            console.log('CLS:', (entry as any).value)
+          }
         })
       }).observe({ type: 'layout-shift', buffered: true })
 
