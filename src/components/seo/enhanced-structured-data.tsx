@@ -1,20 +1,21 @@
-import { generateLocalBusinessStructuredData, generateWebPageStructuredData } from '@/lib/seo-utils'
+import { generateLocalBusinessStructuredData, generateWebPageStructuredData, getAbsoluteUrl } from '@/lib/seo-utils'
 
 export function EnhancedStructuredData() {
   const localBusinessData = generateLocalBusinessStructuredData()
+  const siteUrl = getAbsoluteUrl()
 
   const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Alfa Retailers",
-    "url": "https://www.alfaretailers.com",
-    "logo": "https://www.alfaretailers.com/images/logo-alfa.png",
+    "url": siteUrl,
+    "logo": `${siteUrl}/images/logo-alfa.png`,
     "description": "Professional short-term rental management service that transforms vacant properties into profitable investments",
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "210-526-1401",
+      "telephone": process.env.NEXT_PUBLIC_BUSINESS_PHONE || "210-526-1401",
       "contactType": "customer service",
-      "email": "info@alfaretailers.com",
+      "email": process.env.NEXT_PUBLIC_BUSINESS_EMAIL || "info@alfaretailers.com",
       "availableLanguage": ["English"]
     },
     "address": {
