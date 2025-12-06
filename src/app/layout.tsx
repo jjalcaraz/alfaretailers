@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
-import { StructuredData } from '@/components/seo/structured-data'
+import { EnhancedStructuredData } from '@/components/seo/enhanced-structured-data'
+import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 
 export const metadata: Metadata = {
   title: {
@@ -78,7 +79,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: process.env.GOOGLE_SEARCH_CONSOLE_VERIFICATION || '',
   },
   // Additional SEO meta tags
   other: {
@@ -107,9 +108,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <StructuredData />
+        <EnhancedStructuredData />
       </head>
       <body className="font-sans">
+        <GoogleAnalytics />
         <Header />
         <main className="pt-20">
           {children}
