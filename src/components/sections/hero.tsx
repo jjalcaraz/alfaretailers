@@ -1,27 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Home, TrendingUp, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { AnimatedSection, AnimatedContainer, AnimatedItem } from '@/components/ui/animations'
+import Image from 'next/image'
 
 export function Hero() {
-  const [useFallback, setUseFallback] = useState(false)
-
-  // Fallback image URLs - local first, then remote
-  const localImage = '/images/hero-bg-livingroom.jpg'
-  const remoteImage = 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80'
-  const currentImage = useFallback ? remoteImage : localImage
-
-  // Handle image load error and switch to fallback
-  const handleImageError = () => {
-    console.log('Image load error, switching to fallback')
-    if (!useFallback) {
-      setUseFallback(true)
-    }
-  }
+  // Use the elegant local hero background image
+  const heroImage = '/images/hero-bg-livingroom.jpg'
 
 
   return (
@@ -29,26 +18,25 @@ export function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70 z-10" />
-        <img
-          src={currentImage}
-          alt="Beautiful modern property with stunning views"
-          className="w-full h-full object-cover opacity-100"
-          onError={handleImageError}
-          // Add cache-busting for remote image only
-          {...(useFallback && {
-            src: `${remoteImage}&t=${Date.now()}`,
-            crossOrigin: 'anonymous'
-          })}
+        <Image
+          src={heroImage}
+          alt="Beautiful modern living room with elegant interior design"
+          fill
+          className="object-cover"
+          priority={true}
+          quality={90}
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A8A"
         />
         {/* Overlay gradient for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
       </div>
 
       {/* Content */}
-      <div className="relative z-20 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <div className="relative z-20 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto pt-24">
         {/* Main Headline */}
         <AnimatedSection animation="slideUp" delay={0.2}>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-8 leading-tight tracking-tight font-display">
             Stop Losing Money on
             <span className="block text-brand-orange"> Empty Properties</span>
           </h1>
@@ -56,9 +44,9 @@ export function Hero() {
 
         {/* Subheadline */}
         <AnimatedSection animation="slideUp" delay={0.4}>
-          <p className="text-xl sm:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-            The average vacant long-term rental costs owners <span className="font-bold text-brand-orange">$3,200+ per month</span> in lost revenue.
-            We convert your stagnant property into a high-income short-term rental—<span className="font-semibold underline decoration-2 decoration-brand-orange/50">completely managed</span>.
+          <p className="text-xl sm:text-2xl lg:text-3xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed font-light tracking-wide">
+            The average vacant long-term rental costs owners <span className="font-bold text-brand-orange text-2xl lg:text-4xl">$3,200+</span> per month in lost revenue.
+            We convert your stagnant property into a high-income short-term rental—<span className="font-semibold text-brand-orange underline decoration-4 underline-offset-4 decoration-brand-orange/60">completely managed</span>.
           </p>
         </AnimatedSection>
 
@@ -72,12 +60,12 @@ export function Hero() {
             >
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-brand-purple to-brand-blue hover:from-brand-purple/90 hover:to-brand-blue/90 text-white font-semibold text-lg px-8 py-6 h-auto group shadow-xl"
+                className="bg-gradient-to-r from-brand-orange to-brand-orange-600 hover:from-brand-orange-600 hover:to-brand-orange text-white font-black text-xl px-12 py-8 h-auto group shadow-2xl shadow-brand-orange/30 rounded-2xl tracking-wide uppercase letter-spacing-wide"
                 asChild
               >
                 <Link href="/how-it-works">
                   See How It Works
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
                 </Link>
               </Button>
             </motion.div>
@@ -86,18 +74,18 @@ export function Hero() {
 
         {/* Value Proposition */}
         <AnimatedSection animation="slideUp" delay={0.6}>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 max-w-2xl mx-auto">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-white">
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                <span className="font-medium">40% More Income</span>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-12 max-w-3xl mx-auto border border-white/20">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white text-lg lg:text-xl font-medium">
+              <div className="flex items-center group">
+                <div className="w-3 h-3 bg-brand-green rounded-full mr-3 animate-pulse group-hover:scale-125 transition-transform"></div>
+                <span className="font-bold tracking-wide">40% More Income</span>
               </div>
-              <div className="hidden sm:block text-white/60">•</div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                <span className="font-medium">Zero Management Hassle</span>
+              <div className="hidden sm:block text-white/60 text-2xl">•</div>
+              <div className="flex items-center group">
+                <div className="w-3 h-3 bg-brand-blue rounded-full mr-3 animate-pulse group-hover:scale-125 transition-transform"></div>
+                <span className="font-bold tracking-wide">Zero Management Hassle</span>
               </div>
-              <div className="hidden sm:block text-white/60">•</div>
+              <div className="hidden sm:block text-white/60 text-2xl">•</div>
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
                 <span className="font-medium">Proven Results</span>
@@ -206,11 +194,11 @@ export function Hero() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 1.3 }}
-                  className="text-3xl font-bold"
+                  className="text-4xl lg:text-5xl font-black text-brand-orange tracking-tight font-display"
                 >
                   42%
                 </motion.div>
-                <div className="text-sm text-white/80">Average Monthly Income Increase</div>
+                <div className="text-lg lg:text-xl font-semibold text-white/90 tracking-wide">Average Monthly Income Increase</div>
               </div>
             </AnimatedItem>
           </div>

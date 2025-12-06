@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Menu, X, Phone, Home, HelpCircle, Info, MessageCircle } from 'lucide-react'
+import { Menu, X, Phone, Home, HelpCircle, Info, MessageCircle, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { usePathname } from 'next/navigation'
 
@@ -11,12 +11,12 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
-  // Glassy midnight tint over hero; stays solid once scrolled
-  const isOverlayMode = pathname === '/' && !isScrolled
+  // Enhanced glass effect with subtle animation
+  const isOverlayMode = !isScrolled
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      setIsScrolled(window.scrollY > 10)
     }
 
     window.addEventListener('scroll', handleScroll)
@@ -25,9 +25,9 @@ export function Header() {
 
   const navigation = [
     { name: 'Home', href: '/', icon: Home },
-    { name: 'How It Works', href: '/how-it-works', icon: HelpCircle },
+    { name: 'Services', href: '/how-it-works', icon: HelpCircle },
     { name: 'About', href: '/about', icon: Info },
-    { name: 'FAQ', href: '/faq', icon: MessageCircle },
+    { name: 'Resources', href: '/faq', icon: MessageCircle },
     { name: 'Contact', href: '/contact', icon: Phone },
   ]
 
@@ -40,106 +40,126 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
         isOverlayMode
-          ? 'bg-gradient-to-r from-slate-950/85 via-slate-900/80 to-slate-950/85 backdrop-blur-xl border border-white/10 shadow-[0_10px_30px_rgba(15,23,42,0.35)]'
-          : 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800/60 shadow-[0_6px_24px_rgba(15,23,42,0.35)]'
+          ? 'bg-gradient-to-r from-dark/90 via-dark/85 to-dark/90 backdrop-blur-xl border-b border-white/10 shadow-lg'
+          : 'bg-dark/98 backdrop-blur-lg border-b border-brand-orange/20 shadow-xl'
       }`}
     >
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <span className="inline-flex items-center justify-center rounded-md bg-slate-900/70 border border-amber-200/50 shadow-[0_6px_18px_rgba(0,0,0,0.25)] px-[1px] py-[1px]">
-              <img
-                src="/images/logo-alfa.png"
-                alt="Alfa Retailers"
-                className="h-16 sm:h-18 w-auto object-contain"
-              />
-            </span>
+        <div className="flex items-center justify-between h-24">
+          {/* Enhanced Logo */}
+          <Link href="/" className="group flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-4 focus-visible:ring-offset-dark rounded-lg transition-all-smooth hover:scale-105 animate-slide-in-left gpu-accelerated">
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-brand-orange/20 to-brand-blue/20 rounded-lg blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative bg-dark/80 backdrop-blur-sm rounded-lg border border-brand-orange/30 p-2 shadow-lg">
+                <img
+                  src="/images/logo-alfa.png"
+                  alt="Alfa Retailers"
+                  className="h-16 sm:h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
+            </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          {/* Enhanced Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+                className={`group relative flex items-center px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 min-h-[48px] ${
                   isActive(item.href)
-                    ? 'text-white bg-white/10 border-white/30 shadow-sm'
-                    : 'text-slate-100/80 hover:text-white hover:bg-white/10 border-transparent'
-                }`}
+                    ? 'text-white bg-gradient-to-r from-brand-orange/20 to-brand-orange/10 border border-brand-orange/30 shadow-lg shadow-brand-orange/10'
+                    : 'text-gray-200 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/20'
+                } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-dark`}
               >
-                <item.icon className="h-4 w-4 mr-2" />
-                {item.name}
+                <item.icon className="h-4 w-4 mr-3 transition-transform duration-300 group-hover:scale-110" />
+                <span className="relative">
+                  {item.name}
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-brand-orange transform transition-transform duration-300 ${
+                    isActive(item.href) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                  }`}></span>
+                </span>
               </Link>
             ))}
           </div>
 
-          {/* CTA Button - Desktop */}
-          <div className="hidden md:block">
+          {/* Enhanced CTA Section - Desktop */}
+          <div className="hidden lg:flex items-center space-x-4">
+            <div className="hidden xl:flex items-center text-sm text-gray-300 mr-2">
+              <Phone className="h-4 w-4 mr-2 text-brand-orange" />
+              <span className="font-medium">(210) 526-1401</span>
+            </div>
             <Button
-              size="sm"
-              className="bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold shadow-[0_10px_25px_rgba(234,88,12,0.35)]"
+              size="lg"
+              className="group bg-gradient-to-r from-brand-orange to-brand-orange-600 hover:from-brand-orange-600 hover:to-brand-orange text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-brand-orange/25 transition-all duration-300 hover:shadow-xl hover:shadow-brand-orange/30 hover:scale-105 focus-visible:ring-4 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 focus-visible:ring-offset-dark min-h-[52px]"
               asChild
             >
-              <Link href="/apply">
+              <Link href="/apply" className="focus-visible:outline-none flex items-center">
                 Get Free Analysis
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Enhanced Mobile menu button */}
+          <div className="lg:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-white transition-colors hover:bg-white/10"
+              className="relative p-4 rounded-xl text-white bg-white/10 hover:bg-white/20 transition-all duration-300 min-h-[48px] min-w-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-dark border border-white/20"
+              aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              <div className="relative w-6 h-6">
+                <span className={`absolute top-3 left-0 w-6 h-0.5 bg-current transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-2'}`}></span>
+                <span className={`absolute top-3 left-0 w-6 h-0.5 bg-current transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`}></span>
+                <span className={`absolute top-3 left-0 w-6 h-0.5 bg-current transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-2'}`}></span>
+              </div>
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Enhanced Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-slate-950/95 border-t border-slate-800 shadow-xl backdrop-blur">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
+          <div className="lg:hidden bg-dark/98 backdrop-blur-xl border-t border-brand-orange/20 shadow-2xl">
+            <div className="px-4 pt-6 pb-8 space-y-2">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-700">
+                <div className="text-lg font-bold text-white">Menu</div>
+                <div className="flex items-center text-sm text-gray-300">
+                  <Phone className="h-4 w-4 mr-2 text-brand-orange" />
+                  <span className="font-medium">(210) 526-1401</span>
+                </div>
+              </div>
+
+              {navigation.map((item, index) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center px-3 py-3 text-base font-medium rounded-md transition-all duration-200 ${
+                  className={`group flex items-center px-4 py-4 text-base font-semibold rounded-xl transition-all duration-300 min-h-[52px] ${
                     isActive(item.href)
-                      ? 'bg-white/10 text-white border-l-4 border-white/30'
-                      : 'text-slate-100/90 hover:text-white hover:bg-white/10'
-                  }`}
+                      ? 'text-white bg-gradient-to-r from-brand-orange/20 to-brand-orange/10 border-l-4 border-brand-orange shadow-lg'
+                      : 'text-gray-200 hover:text-white hover:bg-white/5 border-l-4 border-transparent hover:border-brand-orange/50'
+                  } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-dark`}
                   onClick={() => setIsMobileMenuOpen(false)}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <item.icon className="h-5 w-5 mr-3" />
-                  {item.name}
+                  <item.icon className="h-5 w-5 mr-4 transition-transform duration-300 group-hover:scale-110" />
+                  <span className="flex-1">{item.name}</span>
+                  <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
                 </Link>
               ))}
-              <div className="pt-4 pb-2 border-t border-white/5">
+
+              <div className="pt-6 mt-6 border-t border-gray-700">
                 <Button
-                  className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold shadow-[0_10px_25px_rgba(234,88,12,0.35)]"
-                  size="sm"
+                  className="w-full bg-gradient-to-r from-brand-orange to-brand-orange-600 hover:from-brand-orange-600 hover:to-brand-orange text-white font-bold shadow-lg shadow-brand-orange/25 transition-all duration-300 hover:shadow-xl min-h-[56px] text-lg focus-visible:ring-4 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
+                  size="lg"
                   asChild
                 >
-                  <Link href="/apply" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link href="/apply" onClick={() => setIsMobileMenuOpen(false)} className="focus-visible:outline-none flex items-center justify-center">
                     Get Free Analysis
+                    <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-              </div>
-              <div className="px-3 py-3 text-sm text-slate-200/80 border-t border-white/5">
-                <div className="flex items-center">
-                  <Phone className="h-4 w-4 mr-2 text-brand-orange" />
-                  <span className="font-medium">Call: 210-526-1401</span>
-                </div>
               </div>
             </div>
           </div>

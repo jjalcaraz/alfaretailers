@@ -42,8 +42,8 @@ export function IncomeCalculator() {
   const [bedrooms, setBedrooms] = useState(2)
   const [bathrooms, setBathrooms] = useState(2)
   const [city, setCity] = useState('miami')
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
-  const [isCalculated, setIsCalculated] = useState(false)
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(['wifi', 'ac', 'parking'])
+  const [isCalculated, setIsCalculated] = useState(true)
 
   const calculateIncome = () => {
     const baseProperty = propertyTypes.find(p => p.value === propertyType)

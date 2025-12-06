@@ -236,7 +236,13 @@ export default function About() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="bg-gray-200 rounded-full w-32 h-32 mx-auto mb-4"></div>
+                <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80"
+                    alt="Sarah Johnson - CEO & Founder"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   Sarah Johnson
                 </h3>
@@ -249,7 +255,13 @@ export default function About() {
               </div>
 
               <div className="text-center">
-                <div className="bg-gray-200 rounded-full w-32 h-32 mx-auto mb-4"></div>
+                <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80"
+                    alt="Michael Chen - Chief Operations Officer"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   Michael Chen
                 </h3>
@@ -262,7 +274,13 @@ export default function About() {
               </div>
 
               <div className="text-center">
-                <div className="bg-gray-200 rounded-full w-32 h-32 mx-auto mb-4"></div>
+                <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+                  <img
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80"
+                    alt="Emily Rodriguez - Head of Customer Success"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   Emily Rodriguez
                 </h3>

@@ -126,37 +126,7 @@ export function ContactForm({
         <p className="text-gray-600">{description}</p>
       </div>
 
-      {/* Contact Information Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
-          <div className="bg-blue-100 rounded-full p-2">
-            <Phone className="h-5 w-5 text-blue-600" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-900">Phone</p>
-            <p className="text-sm text-gray-600">210-526-1401</p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
-          <div className="bg-green-100 rounded-full p-2">
-            <Mail className="h-5 w-5 text-green-600" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-900">Email</p>
-            <p className="text-sm text-gray-600">info@alfaretailers.com</p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg">
-          <div className="bg-purple-100 rounded-full p-2">
-            <MapPin className="h-5 w-5 text-purple-600" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-900">Office</p>
-            <p className="text-sm text-gray-600">San Antonio, TX</p>
-          </div>
-        </div>
-      </div>
-
+  
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
