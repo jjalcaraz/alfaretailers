@@ -1,17 +1,13 @@
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
 import { Users, TrendingUp, Award, Shield, Home, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 export default function About() {
   return (
-    <div className="min-h-screen">
-      <Header />
-
-      <main className="pt-20">
+    <div className="min-h-screen bg-gray-50">
+      <main>
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-brand-blue/5 to-brand-orange/5">
+        <section className="py-20 bg-gradient-to-br from-brand-blue/10 to-brand-orange/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
@@ -317,8 +313,6 @@ export default function About() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

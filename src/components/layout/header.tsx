@@ -42,8 +42,8 @@ export function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
         isOverlayMode
-          ? 'bg-gradient-to-r from-dark/90 via-dark/85 to-dark/90 backdrop-blur-xl border-b border-white/10 shadow-lg'
-          : 'bg-dark/98 backdrop-blur-lg border-b border-brand-orange/20 shadow-xl'
+          ? 'bg-gradient-to-r from-dark via-dark/98 to-dark backdrop-blur-xl border-b border-white/10 shadow-lg'
+          : 'bg-dark/100 backdrop-blur-lg border-b border-brand-orange/20 shadow-xl'
       }`}
     >
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -71,7 +71,7 @@ export function Header() {
                 className={`group relative flex items-center px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 min-h-[48px] ${
                   isActive(item.href)
                     ? 'text-white bg-gradient-to-r from-brand-orange/20 to-brand-orange/10 border border-brand-orange/30 shadow-lg shadow-brand-orange/10'
-                    : 'text-gray-200 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/20'
+                    : 'text-gray-100 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/20 drop-shadow-sm'
                 } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-dark`}
               >
                 <item.icon className="h-4 w-4 mr-3 transition-transform duration-300 group-hover:scale-110" />
@@ -138,7 +138,7 @@ export function Header() {
                   className={`group flex items-center px-4 py-4 text-base font-semibold rounded-xl transition-all duration-300 min-h-[52px] ${
                     isActive(item.href)
                       ? 'text-white bg-gradient-to-r from-brand-orange/20 to-brand-orange/10 border-l-4 border-brand-orange shadow-lg'
-                      : 'text-gray-200 hover:text-white hover:bg-white/5 border-l-4 border-transparent hover:border-brand-orange/50'
+                      : 'text-gray-100 hover:text-white hover:bg-white/5 border-l-4 border-transparent hover:border-brand-orange/50 drop-shadow-sm'
                   } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-dark`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 50}ms` }}
