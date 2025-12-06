@@ -1,9 +1,35 @@
 import { Metadata } from 'next'
 
-// Get the absolute URL for the site
+// Get the absolute URL for the site (ensures www prefix)
 export function getAbsoluteUrl(path: string = ''): string {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.alfaretailers.com'
-  return `${baseUrl}${path}`
+  let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.alfaretailers.com'
+
+  // Ensure the URL always has www for consistency
+  if (baseUrl.includes('://alfaretailers.com') && !baseUrl.includes('://www.alfaretailers.com')) {
+    baseUrl = baseUrl.replace('://alfaretailers.com', '://www.alfaretailers.com')
+  }
+
+  // Normalize path to avoid double slashes
+  const cleanPath = path.startsWith('/') ? path : `/${path}`
+
+  return `${baseUrl}${cleanPath}`
+}
+
+// Get the canonical URL with proper normalization
+export function getCanonicalUrl(path: string = ''): string {
+  const url = getAbsoluteUrl(path)
+
+  // Remove trailing slash for consistency (except for homepage)
+  if (path.length > 1 && url.endsWith('/')) {
+    return url.slice(0, -1)
+  }
+
+  // Ensure homepage has trailing slash
+  if (!path || path === '/') {
+    return url.replace(/\/$/, '') + '/'
+  }
+
+  return url
 }
 
 // Generate consistent metadata for pages
@@ -17,7 +43,7 @@ export function generatePageMetadata(params: {
 }): Metadata {
   const { title, description, path, image, noindex, keywords } = params
   const imageUrl = image || getAbsoluteUrl('/og-image.jpg')
-  const canonicalUrl = getAbsoluteUrl(path)
+  const canonicalUrl = getCanonicalUrl(path)
 
   return {
     title,
@@ -35,7 +61,7 @@ export function generatePageMetadata(params: {
     authors: [{ name: 'Alfa Retailers' }],
     creator: 'Alfa Retailers',
     publisher: 'Alfa Retailers',
-    metadataBase: new URL(getAbsoluteUrl()),
+    metadataBase: new URL(getCanonicalUrl()),
     alternates: {
       canonical: canonicalUrl,
     },
@@ -78,8 +104,8 @@ export function generateLocalBusinessStructuredData() {
     description: process.env.NEXT_PUBLIC_SITE_DESCRIPTION,
     image: getAbsoluteUrl('/images/logo-alfa.png'),
     url: getAbsoluteUrl(),
-    telephone: process.env.BUSINESS_PHONE || '(210) 526-1401',
-    email: process.env.BUSINESS_EMAIL || 'info@alfaretailers.com',
+    telephone: process.env.NEXT_PUBLIC_BUSINESS_PHONE || '(210) 526-1401',
+    email: process.env.NEXT_PUBLIC_BUSINESS_EMAIL || 'info@alfaretailers.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: process.env.BUSINESS_ADDRESS || '12370 Potranco Rd, Suite 207',
@@ -104,7 +130,7 @@ export function generateLocalBusinessStructuredData() {
     ],
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: process.env.BUSINESS_PHONE || '(210) 526-1401',
+      telephone: process.env.NEXT_PUBLIC_BUSINESS_PHONE || '(210) 526-1401',
       contactType: 'customer service',
       availableLanguage: ['English'],
     },
@@ -129,7 +155,7 @@ export function generateServiceStructuredData(params: {
     provider: {
       '@type': 'LocalBusiness',
       name: process.env.NEXT_PUBLIC_SITE_NAME,
-      telephone: process.env.BUSINESS_PHONE,
+      telephone: process.env.NEXT_PUBLIC_BUSINESS_PHONE,
     },
     image: params.image || getAbsoluteUrl('/images/service-default.jpg'),
     serviceType: 'Property Management Service',

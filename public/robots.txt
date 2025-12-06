@@ -1,11 +1,12 @@
 # AlfaRetailers Robots.txt
-# https://www.alfaretailers.com
+# Preferred domain: https://www.alfaretailers.com
 
 User-agent: *
 Allow: /
-
-# Prioritize important pages
 Crawl-delay: 1
+
+# Host directive for Yandex
+Host: https://www.alfaretailers.com
 
 # Sitemap location
 Sitemap: https://www.alfaretailers.com/sitemap.xml
@@ -15,3 +16,15 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /admin/
 Disallow: /*.json$
+Disallow: /_error
+Disallow: /404
+
+# Allow specific bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

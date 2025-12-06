@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
+import { getCanonicalUrl } from '@/lib/seo-utils'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.alfaretailers.com'
+  const baseUrl = getCanonicalUrl()
   const currentDate = new Date()
 
   // Define all pages with their priorities and update frequencies
