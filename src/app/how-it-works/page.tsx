@@ -17,7 +17,7 @@ const processSteps = [
       "Response within 48 hours"
     ],
     color: "bg-brand-blue",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    image: "https://source.unsplash.com/featured/?property&house&800"
   },
   {
     number: 2,
@@ -31,7 +31,7 @@ const processSteps = [
       "Custom management plan"
     ],
     color: "bg-brand-green",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    image: "https://source.unsplash.com/featured/?analytics&business&800"
   },
   {
     number: 3,
@@ -45,7 +45,7 @@ const processSteps = [
       "Cleaning and maintenance coordination"
     ],
     color: "bg-brand-orange",
-    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    image: "https://source.unsplash.com/featured/?celebration&success&800"
   }
 ]
 

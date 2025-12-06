@@ -15,7 +15,7 @@ const testimonials = [
     increase: "+50%",
     content: "My condo was vacant for 73 days and I was losing thousands every month. Within 2 weeks of signing up with Alfa Retailers, I had my first booking at 50% higher than my previous long-term rent. They handle everything—I just receive the higher payments.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+    image: "https://source.unsplash.com/featured/?woman&face&150"
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const testimonials = [
     increase: "+59%",
     content: "I was skeptical about short-term rentals, but the income projection they showed me was too good to ignore. They delivered exactly what they promised—59% more income and I don't have to deal with tenants, cleaning, or maintenance. Completely transformed my investment.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+    image: "https://source.unsplash.com/featured/?man&professional&150"
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const testimonials = [
     increase: "+47%",
     content: "As a first-time property owner, I was overwhelmed by the vacancy. Alfa Retailers made everything simple. The application was quick, they provided detailed income projections, and now my property earns 47% more while they manage all guest communications and operations.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+    image: "https://source.unsplash.com/featured/?woman&smile&150"
   }
 ]
 

@@ -3,8 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['localhost', 'supabase.co', 'images.unsplash.com'],
+    domains: ['localhost', 'supabase.co', 'images.unsplash.com', 'source.unsplash.com'],
     formats: ['image/webp', 'image/avif'],
+    unoptimized: false,
   },
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,

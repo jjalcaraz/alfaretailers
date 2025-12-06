@@ -234,7 +234,7 @@ export default function About() {
               <div className="text-center">
                 <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
                   <img
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80"
+                    src="https://source.unsplash.com/featured/?woman&business&300"
                     alt="Sarah Johnson - CEO & Founder"
                     className="w-full h-full object-cover"
                   />
@@ -253,7 +253,7 @@ export default function About() {
               <div className="text-center">
                 <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
                   <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80"
+                    src="https://source.unsplash.com/featured/?man&business&300"
                     alt="Michael Chen - Chief Operations Officer"
                     className="w-full h-full object-cover"
                   />
@@ -272,7 +272,7 @@ export default function About() {
               <div className="text-center">
                 <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
                   <img
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80"
+                    src="https://source.unsplash.com/featured/?woman&professional&300"
                     alt="Emily Rodriguez - Head of Customer Success"
                     className="w-full h-full object-cover"
                   />
