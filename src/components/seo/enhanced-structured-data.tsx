@@ -1,13 +1,14 @@
-import { generateLocalBusinessStructuredData, generateWebPageStructuredData, getAbsoluteUrl } from '@/lib/seo-utils'
+import { generateWebPageStructuredData, getAbsoluteUrl } from '@/lib/seo-utils'
 
 export function EnhancedStructuredData() {
-  const localBusinessData = generateLocalBusinessStructuredData()
   // Force production URL to prevent Vercel deployment URLs in structured data
-  const siteUrl = 'https://www.alfaretailers.com'
+  const siteUrl = 'https://alfaretailers.com'
 
+  // Single authoritative Organization schema (combining Organization + LocalBusiness data)
   const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${siteUrl}/#organization`,
     "name": "Alfa Retailers",
     "url": siteUrl,
     "logo": `${siteUrl}/images/logo-alfa.png`,
@@ -43,10 +44,46 @@ export function EnhancedStructuredData() {
       "bestRating": 5,
       "worstRating": 1
     },
-    "openingHours": [
-      "Mo-Fr 09:00-18:00"
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "18:00"
+      }
     ],
-    "priceRange": "$$"
+    "priceRange": "$$",
+    "areaServed": {
+      "@type": "Place",
+      "name": "San Antonio, Texas"
+    }
+  }
+
+  // WebSite schema (important for Search Console)
+  const webSiteData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    "url": siteUrl,
+    "name": "Alfa Retailers",
+    "description": "Transform your vacant property into a profitable short-term rental with professional management services in San Antonio, Texas",
+    "publisher": {
+      "@id": `${siteUrl}/#organization`
+    },
+    "potentialAction": [
+      {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${siteUrl}/search?q={search_term_string}`
+        },
+        "query-input": {
+          "@type": "PropertyValueSpecification",
+          "valueRequired": true,
+          "valueName": "search_term_string"
+        }
+      }
+    ]
   }
 
   const serviceData = {
@@ -155,13 +192,13 @@ export function EnhancedStructuredData() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(localBusinessData)
+          __html: JSON.stringify(organizationData)
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationData)
+          __html: JSON.stringify(webSiteData)
         }}
       />
       <script

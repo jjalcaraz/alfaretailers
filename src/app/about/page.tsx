@@ -1,10 +1,24 @@
 import { Users, TrendingUp, Award, Shield, Home, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { Metadata } from 'next'
+import { pageMetadata } from '../metadata'
+import { StaticPageStructuredData } from '@/components/seo/page-structured-data'
+
+export const metadata: Metadata = pageMetadata.about
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <StaticPageStructuredData
+        type="AboutPage"
+        data={{
+          title: 'About Alfa Retailers - Texas Property Management Experts',
+          description: 'Learn about Alfa Retailers, your trusted partner for short-term rental property management in San Antonio and throughout Texas.',
+          url: '/about'
+        }}
+      />
+      <div className="min-h-screen bg-gray-50">
       <main>
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-brand-blue/10 to-brand-orange/10">
@@ -314,5 +328,6 @@ export default function About() {
         </section>
       </main>
     </div>
+    </>
   )
 }

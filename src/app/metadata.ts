@@ -71,7 +71,7 @@ export const baseMetadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
 }
 
@@ -140,6 +140,74 @@ export const pageMetadata: Record<string, Metadata> = {
       title: 'Privacy Policy - Alfa Retailers Property Management',
       description: 'Read our comprehensive privacy policy to understand how we protect your personal information.',
       url: `${getBaseUrl()}/privacy`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  },
+  pricing: {
+    title: 'Pricing Plans - Transparent Property Management Fees',
+    description: 'Explore our transparent pricing plans for short-term rental property management. No hidden fees, just results. Start with a free property analysis today.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'Pricing Plans - Transparent Property Management Fees',
+      description: 'Explore our transparent pricing plans for short-term rental property management. No hidden fees.',
+      url: `${getBaseUrl()}/pricing`,
+    },
+  },
+  'case-studies': {
+    title: 'Case Studies - Real Results from Real Properties',
+    description: 'See how we\'ve transformed vacant properties into profitable short-term rentals. Real case studies with actual income increases and owner testimonials.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'Case Studies - Real Results from Real Properties',
+      description: 'See how we\'ve transformed vacant properties into profitable short-term rentals. Real results.',
+      url: `${getBaseUrl()}/case-studies`,
+    },
+  },
+  blog: {
+    title: 'Blog - Short-Term Rental Tips & Property Management Insights',
+    description: 'Expert insights on short-term rental management, pricing strategies, property optimization, and maximizing your rental income.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'Blog - Short-Term Rental Tips & Property Management Insights',
+      description: 'Expert insights on short-term rental management, pricing strategies, and property optimization.',
+      url: `${getBaseUrl()}/blog`,
+    },
+  },
+  careers: {
+    title: 'Careers - Join the Alfa Retailers Team',
+    description: 'Explore career opportunities at Alfa Retailers. Join our growing team of property management professionals in San Antonio, Texas.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'Careers - Join the Alfa Retailers Team',
+      description: 'Explore career opportunities at Alfa Retailers. Join our growing team in Texas.',
+      url: `${getBaseUrl()}/careers`,
+    },
+  },
+  terms: {
+    title: 'Terms of Service - Alfa Retailers Property Management',
+    description: 'Read our terms of service to understand the terms and conditions for using Alfa Retailers\' property management services.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'Terms of Service - Alfa Retailers Property Management',
+      description: 'Read our terms of service for using Alfa Retailers\' property management services.',
+      url: `${getBaseUrl()}/terms`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  },
+  cookies: {
+    title: 'Cookie Policy - Alfa Retailers Property Management',
+    description: 'Learn about how Alfa Retailers uses cookies and similar technologies to improve your experience on our website.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'Cookie Policy - Alfa Retailers Property Management',
+      description: 'Learn about how we use cookies to improve your experience on our website.',
+      url: `${getBaseUrl()}/cookies`,
     },
     robots: {
       index: true,

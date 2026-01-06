@@ -3,10 +3,24 @@ import { Footer } from '@/components/layout/footer'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ContactForm } from '@/components/forms/contact-form'
+import { Metadata } from 'next'
+import { pageMetadata } from '../metadata'
+import { StaticPageStructuredData } from '@/components/seo/page-structured-data'
+
+export const metadata: Metadata = pageMetadata.contact
 
 export default function Contact() {
   return (
-    <div className="min-h-screen">
+    <>
+      <StaticPageStructuredData
+        type="ContactPage"
+        data={{
+          title: 'Contact Alfa Retailers - Property Management Experts',
+          description: 'Get in touch with our property management team for a free consultation. Call us at 210-526-1401 or visit our San Antonio office.',
+          url: '/contact'
+        }}
+      />
+      <div className="min-h-screen">
       <Header />
 
       <main className="pt-20">
@@ -147,5 +161,6 @@ export default function Contact() {
 
       <Footer />
     </div>
+    </>
   )
 }
