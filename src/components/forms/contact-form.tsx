@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Loader2, Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { trackLeadSubmission } from '@/components/analytics/google-analytics'
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -18,6 +19,7 @@ const contactSchema = z.object({
   bedrooms: z.string().optional(),
   bathrooms: z.string().optional(),
   address: z.string().optional(),
+  website: z.string().max(0).optional(),
 })
 
 type ContactFormData = z.infer<typeof contactSchema>
@@ -38,6 +40,7 @@ export function ContactForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
+  const [formStartedAt] = useState(() => Date.now())
 
   const {
     register,
@@ -55,12 +58,17 @@ export function ContactForm({
     setSubmitMessage('')
 
     try {
+      const payload = {
+        ...data,
+        formStartedAt,
+      }
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       })
 
       const result = await response.json()
@@ -68,6 +76,12 @@ export function ContactForm({
       if (result.success) {
         setSubmitStatus('success')
         setSubmitMessage(result.message)
+
+        // Track only accepted submissions to avoid inflating analytics with filtered spam.
+        if (!result.filtered) {
+          trackLeadSubmission(data.email, data.phone)
+        }
+
         reset()
       } else {
         setSubmitStatus('error')
@@ -268,6 +282,16 @@ export function ContactForm({
           {errors.message && (
             <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
           )}
+        </div>
+
+        <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            {...register('website')}
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+          />
         </div>
 
         {submitStatus === 'error' && (

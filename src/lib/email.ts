@@ -70,7 +70,30 @@ class EmailService {
     }
   }
 
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  private sanitizeSubjectFragment(value: string): string {
+    return value.replace(/[\r\n]+/g, ' ').trim();
+  }
+
   private generateContactEmailHTML(data: ContactFormData): string {
+    const safeName = this.escapeHtml(data.name);
+    const safeEmail = this.escapeHtml(data.email);
+    const safePhone = data.phone ? this.escapeHtml(data.phone) : '';
+    const safePropertyType = data.propertyType ? this.escapeHtml(data.propertyType) : '';
+    const safeBedrooms = data.bedrooms ? this.escapeHtml(data.bedrooms) : '';
+    const safeBathrooms = data.bathrooms ? this.escapeHtml(data.bathrooms) : '';
+    const safeAddress = data.address ? this.escapeHtml(data.address) : '';
+    const safeMessage = this.escapeHtml(data.message).replace(/\n/g, '<br>');
+    const replyToEmail = encodeURIComponent(data.email.trim());
+
     return `
       <!DOCTYPE html>
       <html>
@@ -143,56 +166,56 @@ class EmailService {
 
           <div class="field">
             <div class="field-label">👤 Name:</div>
-            <div class="field-value">${data.name}</div>
+            <div class="field-value">${safeName}</div>
           </div>
 
           <div class="field">
             <div class="field-label">📧 Email:</div>
-            <div class="field-value">${data.email}</div>
+            <div class="field-value">${safeEmail}</div>
           </div>
 
           ${data.phone ? `
           <div class="field">
             <div class="field-label">📱 Phone:</div>
-            <div class="field-value">${data.phone}</div>
+            <div class="field-value">${safePhone}</div>
           </div>
           ` : ''}
 
           ${data.propertyType ? `
           <div class="field">
             <div class="field-label">🏘️ Property Type:</div>
-            <div class="field-value">${data.propertyType}</div>
+            <div class="field-value">${safePropertyType}</div>
           </div>
           ` : ''}
 
           ${data.bedrooms ? `
           <div class="field">
             <div class="field-label">🛏️ Bedrooms:</div>
-            <div class="field-value">${data.bedrooms}</div>
+            <div class="field-value">${safeBedrooms}</div>
           </div>
           ` : ''}
 
           ${data.bathrooms ? `
           <div class="field">
             <div class="field-label">🚿 Bathrooms:</div>
-            <div class="field-value">${data.bathrooms}</div>
+            <div class="field-value">${safeBathrooms}</div>
           </div>
           ` : ''}
 
           ${data.address ? `
           <div class="field">
             <div class="field-label">📍 Property Address:</div>
-            <div class="field-value">${data.address}</div>
+            <div class="field-value">${safeAddress}</div>
           </div>
           ` : ''}
 
           <div class="field">
             <div class="field-label">💬 Message:</div>
-            <div class="field-value">${data.message.replace(/\n/g, '<br>')}</div>
+            <div class="field-value">${safeMessage}</div>
           </div>
 
           <div style="text-align: center; margin-top: 30px;">
-            <a href="mailto:${data.email}" style="background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+            <a href="mailto:${replyToEmail}" style="background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
               📧 Reply to Client
             </a>
           </div>
@@ -209,6 +232,8 @@ class EmailService {
   }
 
   private generateAutoReplyHTML(data: ContactFormData): string {
+    const safeName = this.escapeHtml(data.name);
+
     return `
       <!DOCTYPE html>
       <html>
@@ -265,12 +290,12 @@ class EmailService {
       </head>
       <body>
         <div class="header">
-          <h1>Thank You, ${data.name}! 🎉</h1>
+          <h1>Thank You, ${safeName}! 🎉</h1>
           <p>Your inquiry has been received</p>
         </div>
 
         <div class="content">
-          <p>Dear ${data.name},</p>
+          <p>Dear ${safeName},</p>
 
           <p>Thank you for contacting Alfa Retailers! We've received your inquiry and are excited to help you transform your property into a profitable short-term rental.</p>
 
@@ -347,7 +372,7 @@ class EmailService {
   }
 
   async sendContactNotification(data: ContactFormData): Promise<{ success: boolean; message: string }> {
-    const subject = `New Contact Form: ${data.name} - Property Management Inquiry`;
+    const subject = `New Contact Form: ${this.sanitizeSubjectFragment(data.name)} - Property Management Inquiry`;
     const html = this.generateContactEmailHTML(data);
 
     return this.sendEmail({
