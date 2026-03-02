@@ -10,6 +10,7 @@
     "type-check": "tsc --noEmit",
     "test:seo": "node scripts/seo-validator.js",
     "test:e2e": "playwright test",
+    "test:contact-security": "node scripts/contact-security-smoke-test.mjs",
     "test": "npm run test:seo && npm run test:e2e",
     "validate": "node scripts/pre-deploy-check.js",
     "pre-deploy": "npm run validate && npm run build",

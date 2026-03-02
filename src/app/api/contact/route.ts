@@ -1,195 +1,241 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { emailService } from '@/lib/email';
+import {
+  ContactPayload,
+  RequestSignals,
+  applyRateLimits,
+  botScore,
+  buildLogContext,
+  evaluateTiming,
+  getContactMetricsSnapshot,
+  getRecommendedThresholds,
+  recordAccepted,
+  recordBlocked,
+  recordQuarantined,
+  shouldQuarantine,
+  shouldRejectForBotScore,
+  storeQuarantineRecord,
+  validateOriginSignals,
+  verifyContactFormAttestationToken,
+  verifyHumanChallenge,
+} from '@/lib/security/contact-guard';
 
 const SUCCESS_RESPONSE = {
   success: true,
   message: 'Thank you for your inquiry! We\'ll get back to you within 24 hours.',
 };
 
-// Define validation schema for contact form
+const GENERIC_BLOCK_MESSAGE = 'We could not process your request at this time. Please try again later.';
+
 const optionalShortText = z.string().trim().max(120).optional();
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(80, 'Name is too long'),
   email: z.string().trim().email('Please enter a valid email address').max(254, 'Email is too long'),
   phone: z.string().trim().max(30, 'Phone number is too long').optional(),
-  message: z.string().trim().min(10, 'Message must be at least 10 characters').max(2000, 'Message is too long'),
+  message: z.string().trim().min(20, 'Message must be at least 20 characters').max(2000, 'Message is too long'),
   propertyType: optionalShortText,
   bedrooms: optionalShortText,
   bathrooms: optionalShortText,
   address: z.string().trim().max(200).optional(),
-  website: z.string().trim().max(0).optional(), // Honeypot field - should stay empty
-  formStartedAt: z.number().int().positive().optional(), // Client-side timestamp
+  companyWebsite: z.string().trim().max(0).optional(),
+  formStartedAt: z.number().int().positive(),
+  formAttestationToken: z.string().trim().min(1, 'Security token missing'),
+  turnstileToken: z.string().trim().optional(),
 });
 
-// Rate limiting storage (in production, use Redis or database)
-const rateLimiter = new Map<string, { count: number; lastReset: number }>();
-
-function getClientIdentifier(request: NextRequest): string {
+function extractClientIp(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for');
-  const ip = forwarded ? forwarded.split(',')[0].trim() :
-               request.headers.get('x-real-ip') ||
-               'unknown';
-  const userAgent = request.headers.get('user-agent') || 'unknown';
-  return `${ip}:${userAgent.slice(0, 80)}`;
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+
+  return request.headers.get('x-real-ip') || 'unknown';
 }
 
-function buildRateLimitKey(scope: 'ip' | 'email', identifier: string): string {
-  return `${scope}:${identifier.toLowerCase()}`;
+function buildRequestSignals(request: NextRequest): RequestSignals {
+  return {
+    ip: extractClientIp(request),
+    userAgent: request.headers.get('user-agent') || 'unknown',
+    origin: request.headers.get('origin'),
+    referer: request.headers.get('referer'),
+  };
 }
 
-function checkRateLimit(identifier: string, maxRequests = 5, windowMs = 60000): boolean {
-  const now = Date.now();
-  const record = rateLimiter.get(identifier);
-
-  if (!record) {
-    rateLimiter.set(identifier, { count: 1, lastReset: now });
-    return true;
-  }
-
-  // Reset window if expired
-  if (now - record.lastReset > windowMs) {
-    rateLimiter.set(identifier, { count: 1, lastReset: now });
-    return true;
-  }
-
-  // Check if over limit
-  if (record.count >= maxRequests) {
-    return false;
-  }
-
-  // Increment count
-  record.count++;
-  return true;
-}
-
-function containsLongSingleToken(value: string, minLength = 20): boolean {
-  return value
-    .trim()
-    .split(/\s+/)
-    .some((token) => token.length >= minLength);
-}
-
-function looksLikeAutomatedNoise(name: string, message: string): boolean {
-  const trimmedName = name.trim();
-  const trimmedMessage = message.trim();
-
-  if (!/\s/.test(trimmedName) && containsLongSingleToken(trimmedName) && containsLongSingleToken(trimmedMessage)) {
-    return true;
-  }
-
-  if (!/\s/.test(trimmedMessage) && trimmedMessage.length >= 24) {
-    return true;
-  }
-
-  return false;
-}
-
-function shouldSilentlyDropSubmission(formData: z.infer<typeof contactSchema>): { drop: boolean; reason: string } {
-  if ((formData.website ?? '').trim().length > 0) {
-    return { drop: true, reason: 'honeypot_field_filled' };
-  }
-
-  if (!formData.formStartedAt) {
-    return { drop: true, reason: 'missing_form_timestamp' };
-  }
-
-  const elapsedMs = Date.now() - formData.formStartedAt;
-  if (elapsedMs < 2500 || elapsedMs > 12 * 60 * 60 * 1000) {
-    return { drop: true, reason: 'invalid_form_submission_timing' };
-  }
-
-  if (looksLikeAutomatedNoise(formData.name, formData.message)) {
-    return { drop: true, reason: 'automated_noise_pattern' };
-  }
-
-  return { drop: false, reason: 'accepted' };
+function blockedResponse(status: number) {
+  return NextResponse.json(
+    {
+      success: false,
+      message: GENERIC_BLOCK_MESSAGE,
+    },
+    { status },
+  );
 }
 
 export async function POST(request: NextRequest) {
-  try {
-    // Rate limiting by IP + user agent fingerprint
-    const clientId = getClientIdentifier(request);
-    const ipRateLimitKey = buildRateLimitKey('ip', clientId);
-    if (!checkRateLimit(ipRateLimitKey, 3, 10 * 60 * 1000)) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Too many requests. Please try again later.'
-        },
-        { status: 429 }
-      );
-    }
+  const signals = buildRequestSignals(request);
 
+  let parsedPayload: ContactPayload | null = null;
+
+  try {
     const body = await request.json();
 
-    // Validate input
     const validationResult = contactSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
         {
           success: false,
           message: 'Validation failed',
-          errors: validationResult.error.errors.map(err => ({
-            field: err.path.join('.'),
-            message: err.message
-          }))
+          errors: validationResult.error.errors.map((error) => ({
+            field: error.path.join('.'),
+            message: error.message,
+          })),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const formData = {
+    parsedPayload = {
       ...validationResult.data,
       email: validationResult.data.email.toLowerCase(),
+      phone: validationResult.data.phone?.trim(),
+      propertyType: validationResult.data.propertyType?.trim(),
+      bedrooms: validationResult.data.bedrooms?.trim(),
+      bathrooms: validationResult.data.bathrooms?.trim(),
+      address: validationResult.data.address?.trim(),
+      companyWebsite: validationResult.data.companyWebsite?.trim(),
     };
 
-    // Rate limiting by email address to reduce repeated spam cycles
-    const emailRateLimitKey = buildRateLimitKey('email', formData.email);
-    if (!checkRateLimit(emailRateLimitKey, 2, 12 * 60 * 60 * 1000)) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Too many requests. Please try again later.'
-        },
-        { status: 429 }
-      );
+    const originValidation = validateOriginSignals(signals);
+    if (!originValidation.ok) {
+      recordBlocked(originValidation.reason);
+      console.warn('contact_form_blocked', {
+        reason: originValidation.reason,
+        ...buildLogContext(parsedPayload, signals),
+      });
+      return blockedResponse(403);
     }
 
-    const spamCheck = shouldSilentlyDropSubmission(formData);
-    if (spamCheck.drop) {
-      console.warn('Contact form submission silently dropped', {
-        reason: spamCheck.reason,
-        clientId,
-        timestamp: new Date().toISOString(),
+    const attestationResult = verifyContactFormAttestationToken(parsedPayload.formAttestationToken, signals.userAgent);
+    if (!attestationResult.ok) {
+      recordBlocked(attestationResult.reason);
+      console.warn('contact_form_blocked', {
+        reason: attestationResult.reason,
+        ...buildLogContext(parsedPayload, signals),
       });
+      return blockedResponse(403);
+    }
+
+    if ((parsedPayload.companyWebsite ?? '').length > 0) {
+      recordBlocked('honeypot_filled');
+      console.warn('contact_form_blocked', {
+        reason: 'honeypot_filled',
+        ...buildLogContext(parsedPayload, signals),
+      });
+      return blockedResponse(400);
+    }
+
+    const timingResult = evaluateTiming(parsedPayload.formStartedAt);
+    if (!timingResult.ok) {
+      recordBlocked(timingResult.reason);
+      console.warn('contact_form_blocked', {
+        reason: timingResult.reason,
+        elapsedMs: timingResult.elapsedMs,
+        ...buildLogContext(parsedPayload, signals),
+      });
+      return blockedResponse(400);
+    }
+
+    const rateLimitResult = applyRateLimits(parsedPayload.email, signals);
+    if (!rateLimitResult.ok) {
+      recordBlocked(rateLimitResult.reason);
+      console.warn('contact_form_blocked', {
+        reason: rateLimitResult.reason,
+        ...buildLogContext(parsedPayload, signals),
+      });
+      return blockedResponse(429);
+    }
+
+    const challengeResult = await verifyHumanChallenge(parsedPayload.turnstileToken, signals);
+    if (!challengeResult.ok) {
+      recordBlocked(challengeResult.reason);
+      console.warn('contact_form_blocked', {
+        reason: challengeResult.reason,
+        ...buildLogContext(parsedPayload, signals),
+      });
+      return blockedResponse(403);
+    }
+
+    const scoreResult = botScore(parsedPayload);
+    if (shouldRejectForBotScore(scoreResult)) {
+      recordBlocked('bot_score_rejected');
+      console.warn('contact_form_blocked', {
+        reason: 'bot_score_rejected',
+        ...buildLogContext(parsedPayload, signals, scoreResult),
+      });
+      return blockedResponse(400);
+    }
+
+    if (shouldQuarantine(scoreResult)) {
+      storeQuarantineRecord(parsedPayload, 'bot_score_quarantined', scoreResult, signals);
+      recordQuarantined('bot_score_quarantined');
+      console.warn('contact_form_quarantined', {
+        reason: 'bot_score_quarantined',
+        ...buildLogContext(parsedPayload, signals, scoreResult),
+      });
+
       return NextResponse.json({
         ...SUCCESS_RESPONSE,
-        filtered: true
+        filtered: true,
+        quarantined: true,
       });
     }
 
-    // Send notification email to Alfa Retailers
-    const notificationResult = await emailService.sendContactNotification(formData);
+    const notificationPromise = emailService.sendContactNotification(parsedPayload);
+    const autoReplyPromise = emailService.sendAutoReply(parsedPayload);
+
+    const sendAsync = process.env.CONTACT_EMAIL_QUEUE_MODE === 'async';
+
+    if (sendAsync) {
+      void Promise.all([notificationPromise, autoReplyPromise])
+        .then(([notificationResult, autoReplyResult]) => {
+          if (!notificationResult.success) {
+            console.error('contact_form_email_failure', { type: 'notification', message: notificationResult.message });
+          }
+          if (!autoReplyResult.success) {
+            console.error('contact_form_email_failure', { type: 'auto_reply', message: autoReplyResult.message });
+          }
+        })
+        .catch((error) => {
+          console.error('contact_form_email_failure', { type: 'async_queue', error });
+        });
+
+      recordAccepted();
+      console.info('contact_form_accepted', buildLogContext(parsedPayload, signals, scoreResult));
+
+      return NextResponse.json({
+        ...SUCCESS_RESPONSE,
+        filtered: false,
+        queued: true,
+      });
+    }
+
+    const [notificationResult, autoReplyResult] = await Promise.all([notificationPromise, autoReplyPromise]);
 
     if (!notificationResult.success) {
-      console.error('Failed to send notification email:', notificationResult.message);
-      // Continue anyway - we still want to save the submission
+      console.error('contact_form_email_failure', { type: 'notification', message: notificationResult.message });
     }
-
-    // Send auto-reply to the user
-    const autoReplyResult = await emailService.sendAutoReply(formData);
 
     if (!autoReplyResult.success) {
-      console.error('Failed to send auto-reply email:', autoReplyResult.message);
-      // Continue anyway - the main notification was sent
+      console.error('contact_form_email_failure', { type: 'auto_reply', message: autoReplyResult.message });
     }
 
-    console.log('Contact form submission accepted:', {
-      timestamp: new Date().toISOString(),
+    recordAccepted();
+    console.info('contact_form_accepted', {
+      ...buildLogContext(parsedPayload, signals, scoreResult),
       notificationSent: notificationResult.success,
-      autoReplySent: autoReplyResult.success
+      autoReplySent: autoReplyResult.success,
     });
 
     return NextResponse.json({
@@ -197,31 +243,49 @@ export async function POST(request: NextRequest) {
       filtered: false,
       data: {
         notificationSent: notificationResult.success,
-        autoReplySent: autoReplyResult.success
-      }
+        autoReplySent: autoReplyResult.success,
+      },
     });
-
   } catch (error) {
-    console.error('Contact form submission error:', error);
+    if (parsedPayload) {
+      recordBlocked('internal_error');
+      console.error('contact_form_error', {
+        ...buildLogContext(parsedPayload, signals),
+        error,
+      });
+    } else {
+      recordBlocked('invalid_json_payload');
+      console.error('contact_form_error', {
+        reason: 'invalid_json_payload',
+        ip: signals.ip,
+        userAgentPreview: signals.userAgent.slice(0, 32),
+      });
+    }
 
     return NextResponse.json(
       {
         success: false,
-        message: 'An error occurred while processing your request. Please try again.'
+        message: 'An error occurred while processing your request. Please try again.',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-export async function GET() {
-  if (process.env.NODE_ENV !== 'development') {
+export async function GET(request: NextRequest) {
+  const adminKey = process.env.CONTACT_METRICS_ADMIN_KEY;
+  const providedAdminKey = request.headers.get('x-contact-admin-key') || new URL(request.url).searchParams.get('key');
+
+  const allowMetrics = process.env.NODE_ENV === 'development' || (adminKey && providedAdminKey === adminKey);
+  if (!allowMetrics) {
     return NextResponse.json({ message: 'Not found' }, { status: 404 });
   }
 
   return NextResponse.json({
-    message: 'Contact form API endpoint',
+    message: 'Contact form security metrics',
     emailConfigured: emailService.isConfigured(),
-    config: emailService.getConfigurationInfo()
+    emailConfig: emailService.getConfigurationInfo(),
+    thresholds: getRecommendedThresholds(),
+    ...getContactMetricsSnapshot(),
   });
 }

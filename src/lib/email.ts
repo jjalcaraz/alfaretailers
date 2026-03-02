@@ -29,6 +29,8 @@ interface ContactFormData {
   address?: string;
 }
 
+const INTERNAL_NOTIFICATION_RECIPIENT_FALLBACK = 'info@alfaretailers.com';
+
 class EmailService {
   private transporter: nodemailer.Transporter | null = null;
   private config: EmailConfig;
@@ -81,6 +83,33 @@ class EmailService {
 
   private sanitizeSubjectFragment(value: string): string {
     return value.replace(/[\r\n]+/g, ' ').trim();
+  }
+
+  private sanitizeAddress(value: string): string {
+    return value.replace(/[\r\n]+/g, '').trim();
+  }
+
+  private getInternalNotificationRecipients(): string {
+    const configured = process.env.CONTACT_NOTIFICATION_RECIPIENTS || INTERNAL_NOTIFICATION_RECIPIENT_FALLBACK;
+    const allowedDomains = (process.env.CONTACT_ALLOWED_RECIPIENT_DOMAINS || 'alfaretailers.com')
+      .split(',')
+      .map((domain) => domain.trim().toLowerCase())
+      .filter(Boolean);
+
+    const recipients = configured
+      .split(',')
+      .map((recipient) => this.sanitizeAddress(recipient).toLowerCase())
+      .filter(Boolean)
+      .filter((recipient) => {
+        const [, domain = ''] = recipient.split('@');
+        return allowedDomains.includes(domain);
+      });
+
+    if (recipients.length === 0) {
+      return INTERNAL_NOTIFICATION_RECIPIENT_FALLBACK;
+    }
+
+    return recipients.join(', ');
   }
 
   private generateContactEmailHTML(data: ContactFormData): string {
@@ -348,9 +377,9 @@ class EmailService {
 
     try {
       const mailOptions = {
-        from: data.from || `"Alfa Retailers" <${this.config.auth.user}>`,
-        to: data.to,
-        subject: data.subject,
+        from: data.from ? this.sanitizeAddress(data.from) : `"Alfa Retailers" <${this.sanitizeAddress(this.config.auth.user)}>`,
+        to: this.sanitizeAddress(data.to),
+        subject: this.sanitizeSubjectFragment(data.subject),
         html: data.html,
         text: data.text || this.htmlToText(data.html),
       };
@@ -376,7 +405,7 @@ class EmailService {
     const html = this.generateContactEmailHTML(data);
 
     return this.sendEmail({
-      to: 'info@alfaretailers.com',
+      to: this.getInternalNotificationRecipients(),
       subject,
       html,
     });

@@ -6,10 +6,17 @@ import { ContactForm } from '@/components/forms/contact-form'
 import { Metadata } from 'next'
 import { pageMetadata } from '../metadata'
 import { StaticPageStructuredData } from '@/components/seo/page-structured-data'
+import { headers } from 'next/headers'
+import { issueContactFormAttestationToken } from '@/lib/security/contact-guard'
 
 export const metadata: Metadata = pageMetadata.contact
 
-export default function Contact() {
+export default async function Contact() {
+  const requestHeaders = headers()
+  const userAgent = requestHeaders.get('user-agent') || 'unknown'
+  const formAttestationToken = issueContactFormAttestationToken(userAgent)
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
   return (
     <>
       <StaticPageStructuredData
@@ -47,6 +54,8 @@ export default function Contact() {
                 title="Send Us a Message"
                 description="Fill out the form below and we'll get back to you within 24 hours."
                 showPropertyFields={false}
+                formAttestationToken={formAttestationToken}
+                turnstileSiteKey={turnstileSiteKey}
               />
 
               {/* Contact Information */}

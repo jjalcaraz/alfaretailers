@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Loader2, Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react'
+import { Loader2, Send, CheckCircle, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { trackLeadSubmission } from '@/components/analytics/google-analytics'
 
@@ -14,12 +14,12 @@ const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().optional(),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
+  message: z.string().min(20, 'Message must be at least 20 characters'),
   propertyType: z.string().optional(),
   bedrooms: z.string().optional(),
   bathrooms: z.string().optional(),
   address: z.string().optional(),
-  website: z.string().max(0).optional(),
+  companyWebsite: z.string().max(0).optional(),
 })
 
 type ContactFormData = z.infer<typeof contactSchema>
@@ -29,18 +29,101 @@ interface ContactFormProps {
   showPropertyFields?: boolean
   title?: string
   description?: string
+  formAttestationToken: string
+  turnstileSiteKey?: string
+}
+
+type TurnstileOptions = {
+  sitekey: string
+  callback: (token: string) => void
+  'expired-callback': () => void
+  'error-callback': () => void
+}
+
+type TurnstileApi = {
+  render: (container: HTMLElement, options: TurnstileOptions) => string
+  reset: (widgetId?: string) => void
+}
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi
+  }
 }
 
 export function ContactForm({
   className,
   showPropertyFields = false,
-  title = "Get in Touch",
-  description = "Have questions about our property management services? We're here to help!"
+  title = 'Get in Touch',
+  description = "Have questions about our property management services? We're here to help!",
+  formAttestationToken,
+  turnstileSiteKey,
 }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
   const [formStartedAt] = useState(() => Date.now())
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const [challengeReady, setChallengeReady] = useState(false)
+
+  const turnstileContainerRef = useRef<HTMLDivElement | null>(null)
+  const turnstileWidgetIdRef = useRef<string | null>(null)
+
+  const challengeEnabled = Boolean(turnstileSiteKey)
+
+  useEffect(() => {
+    if (!challengeEnabled || !turnstileSiteKey || !turnstileContainerRef.current) {
+      return
+    }
+
+    let cancelled = false
+
+    const renderWidget = () => {
+      if (cancelled || !window.turnstile || !turnstileContainerRef.current || turnstileWidgetIdRef.current) {
+        return
+      }
+
+      turnstileWidgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
+        sitekey: turnstileSiteKey,
+        callback: (token: string) => {
+          setTurnstileToken(token)
+          setSubmitStatus('idle')
+          setSubmitMessage('')
+        },
+        'expired-callback': () => setTurnstileToken(''),
+        'error-callback': () => setTurnstileToken(''),
+      })
+
+      setChallengeReady(true)
+    }
+
+    if (window.turnstile) {
+      renderWidget()
+      return () => {
+        cancelled = true
+      }
+    }
+
+    const existingScript = document.getElementById('cf-turnstile-script') as HTMLScriptElement | null
+    if (existingScript) {
+      existingScript.addEventListener('load', renderWidget, { once: true })
+      return () => {
+        cancelled = true
+      }
+    }
+
+    const script = document.createElement('script')
+    script.id = 'cf-turnstile-script'
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+    script.async = true
+    script.defer = true
+    script.onload = renderWidget
+    document.head.appendChild(script)
+
+    return () => {
+      cancelled = true
+    }
+  }, [challengeEnabled, turnstileSiteKey])
 
   const {
     register,
@@ -57,10 +140,33 @@ export function ContactForm({
     setSubmitStatus('idle')
     setSubmitMessage('')
 
+    if (!formAttestationToken) {
+      setSubmitStatus('error')
+      setSubmitMessage('Security validation is currently unavailable. Please refresh the page and try again.')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (!challengeEnabled) {
+      setSubmitStatus('error')
+      setSubmitMessage('Human verification is required right now. Please try again in a few minutes.')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (challengeEnabled && !turnstileToken) {
+      setSubmitStatus('error')
+      setSubmitMessage('Please complete the human verification challenge before submitting.')
+      setIsSubmitting(false)
+      return
+    }
+
     try {
       const payload = {
         ...data,
         formStartedAt,
+        formAttestationToken,
+        turnstileToken,
       }
 
       const response = await fetch('/api/contact', {
@@ -77,17 +183,20 @@ export function ContactForm({
         setSubmitStatus('success')
         setSubmitMessage(result.message)
 
-        // Track only accepted submissions to avoid inflating analytics with filtered spam.
         if (!result.filtered) {
           trackLeadSubmission(data.email, data.phone)
         }
 
         reset()
+        setTurnstileToken('')
+        if (window.turnstile) {
+          window.turnstile.reset(turnstileWidgetIdRef.current || undefined)
+        }
       } else {
         setSubmitStatus('error')
         setSubmitMessage(result.message || 'Something went wrong. Please try again.')
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus('error')
       setSubmitMessage('Network error. Please check your connection and try again.')
     } finally {
@@ -101,8 +210,8 @@ export function ContactForm({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className={cn(
-          "bg-green-50 border border-green-200 rounded-xl p-8 text-center",
-          className
+          'bg-green-50 border border-green-200 rounded-xl p-8 text-center',
+          className,
         )}
       >
         <div className="flex justify-center mb-4">
@@ -134,13 +243,12 @@ export function ContactForm({
   }
 
   return (
-    <div className={cn("bg-white rounded-xl shadow-lg p-8", className)}>
+    <div className={cn('bg-white rounded-xl shadow-lg p-8', className)}>
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">{title}</h2>
         <p className="text-gray-600">{description}</p>
       </div>
 
-  
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -151,8 +259,8 @@ export function ContactForm({
               {...register('name')}
               type="text"
               className={cn(
-                "w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-colors",
-                errors.name ? "border-red-300" : "border-gray-300"
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-colors',
+                errors.name ? 'border-red-300' : 'border-gray-300',
               )}
               placeholder="John Doe"
             />
@@ -169,8 +277,8 @@ export function ContactForm({
               {...register('email')}
               type="email"
               className={cn(
-                "w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-colors",
-                errors.email ? "border-red-300" : "border-gray-300"
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-colors',
+                errors.email ? 'border-red-300' : 'border-gray-300',
               )}
               placeholder="john@example.com"
             />
@@ -274,8 +382,8 @@ export function ContactForm({
             {...register('message')}
             rows={5}
             className={cn(
-              "w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-colors resize-none",
-              errors.message ? "border-red-300" : "border-gray-300"
+              'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-colors resize-none',
+              errors.message ? 'border-red-300' : 'border-gray-300',
             )}
             placeholder="Tell us about your property and how we can help..."
           />
@@ -284,10 +392,27 @@ export function ContactForm({
           )}
         </div>
 
+        {challengeEnabled ? (
+          <div>
+            <p className="block text-sm font-medium text-gray-700 mb-2">Human verification *</p>
+            <div ref={turnstileContainerRef} />
+            {!challengeReady && (
+              <p className="mt-2 text-xs text-gray-500">Loading verification challenge...</p>
+            )}
+          </div>
+        ) : (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="text-xs text-amber-800">
+              Human verification is unavailable right now. Please contact us directly at info@alfaretailers.com.
+            </p>
+          </div>
+        )}
+
         <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
-          <label htmlFor="website">Website</label>
+          <label htmlFor="companyWebsite">Company website</label>
           <input
-            {...register('website')}
+            {...register('companyWebsite')}
+            id="companyWebsite"
             type="text"
             tabIndex={-1}
             autoComplete="off"
@@ -307,7 +432,7 @@ export function ContactForm({
         >
           <Button
             type="submit"
-            disabled={isSubmitting || !isValid}
+            disabled={isSubmitting || !isValid || !challengeEnabled || (challengeEnabled && !turnstileToken)}
             className="w-full bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold py-4 px-6 h-auto text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {isSubmitting ? (
