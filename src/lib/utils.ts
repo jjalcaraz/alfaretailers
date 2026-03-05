@@ -6,13 +6,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getBaseUrl(): string {
-  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
-    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  // Always use production URL to prevent Vercel deployment URLs in canonical tags
+  // Only use environment variable if it's explicitly set to our production domain
+  if (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.includes('alfaretailers.com')) {
+    return process.env.NEXT_PUBLIC_SITE_URL
   }
   if (process.env.NODE_ENV === 'development') {
     return 'http://localhost:3000'
   }
-  return 'https://www.alfaretailers.com'
+  return 'https://alfaretailers.com'
 }
 
 export function formatPhoneNumber(phone: string): string {

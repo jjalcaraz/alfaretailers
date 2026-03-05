@@ -6,6 +6,7 @@ import { Calculator, TrendingUp, Home, BedDouble } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { AnimatedSection, AnimatedContainer, AnimatedItem } from '@/components/ui/animations'
+import { trackIncomeCalculation } from '@/components/analytics/google-analytics'
 
 const propertyTypes = [
   { value: 'apartment', label: 'Apartment', basePrice: 120 },
@@ -74,6 +75,11 @@ export function IncomeCalculator() {
   }
 
   const handleCalculate = () => {
+    const results = calculateIncome()
+
+    // Track income calculation in Google Analytics
+    trackIncomeCalculation(results.monthlyIncome)
+
     setIsCalculated(true)
   }
 

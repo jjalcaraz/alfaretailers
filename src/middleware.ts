@@ -11,9 +11,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301)
   }
 
-  // Force WWW domain
-  if (hostname === 'alfaretailers.com') {
-    url.hostname = 'www.alfaretailers.com'
+  // Force non-WWW domain for consistency with canonical URLs
+  if (hostname === 'www.alfaretailers.com') {
+    url.hostname = 'alfaretailers.com'
     return NextResponse.redirect(url, 301)
   }
 

@@ -6,7 +6,7 @@ import { EnhancedStructuredData } from '@/components/seo/enhanced-structured-dat
 import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 
 // Force production URL to prevent Vercel deployment URLs in canonical tags
-const PRODUCTION_URL = 'https://www.alfaretailers.com'
+const PRODUCTION_URL = 'https://alfaretailers.com'
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || PRODUCTION_URL
 
 export const metadata: Metadata = {
