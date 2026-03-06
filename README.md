@@ -107,8 +107,15 @@ Create API routes in `src/app/api/` directory following Next.js 13+ app router p
 This project is configured for deployment on Vercel:
 
 1. Connect your GitHub repository to Vercel
-2. Configure environment variables in Vercel dashboard
+2. Configure environment variables in Vercel dashboard (including bot prevention keys)
 3. Deploy automatically on push to main branch
+
+### Required Environment Variables
+
+See `.env.example` for all required environment variables including:
+- Database connection (DATABASE_URL)
+- Email service (RESEND_API_KEY)
+- Bot prevention (TURNSTILE_SECRET_KEY, NEXT_PUBLIC_TURNSTILE_SITE_KEY, CONTACT_FORM_TOKEN_SECRET)
 
 ## 📊 Analytics
 
