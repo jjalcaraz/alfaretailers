@@ -4,16 +4,20 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
   const hostname = url.hostname
+  const isLocalhost =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === '::1'
 
-  // Force HTTPS
-  if (url.protocol === 'http:') {
+  // Only force HTTPS on production hosts. Local `next dev` serves plain HTTP.
+  if (process.env.NODE_ENV === 'production' && !isLocalhost && url.protocol === 'http:') {
     url.protocol = 'https'
     return NextResponse.redirect(url, 301)
   }
 
-  // Force non-WWW domain for consistency with canonical URLs
-  if (hostname === 'www.alfaretailers.com') {
-    url.hostname = 'alfaretailers.com'
+  // Align runtime redirects with the Vercel redirect policy and canonical host.
+  if (hostname === 'alfaretailers.com') {
+    url.hostname = 'www.alfaretailers.com'
     return NextResponse.redirect(url, 301)
   }
 

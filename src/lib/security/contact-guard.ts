@@ -1,6 +1,13 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
-const DEFAULT_ALLOWED_ORIGINS = ['https://alfaretailers.com', 'https://www.alfaretailers.com', 'http://localhost:3000'];
+const DEFAULT_ALLOWED_ORIGINS = [
+  'https://alfaretailers.com',
+  'https://www.alfaretailers.com',
+  'http://localhost:3000',
+  'https://localhost:3000',
+  'http://127.0.0.1:3000',
+  'https://127.0.0.1:3000',
+];
 const DEFAULT_FORM_TOKEN_TTL_MS = 30 * 60 * 1000;
 const DEFAULT_MIN_SUBMIT_MS = 4_000;
 const DEFAULT_MAX_SUBMIT_MS = 12 * 60 * 60 * 1000;
