@@ -15,6 +15,7 @@ export default async function Contact() {
   const requestHeaders = headers()
   const userAgent = requestHeaders.get('user-agent') || 'unknown'
   const formAttestationToken = issueContactFormAttestationToken(userAgent)
+  // Turnstile site key from environment variable
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
   return (
