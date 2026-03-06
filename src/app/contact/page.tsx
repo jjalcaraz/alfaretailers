@@ -17,6 +17,10 @@ export default async function Contact() {
   const formAttestationToken = issueContactFormAttestationToken(userAgent)
   // Turnstile site key from environment variable
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+  
+  // Debug: Log site key status (will be visible in build logs)
+  console.log('[Contact Page] Turnstile site key:', turnstileSiteKey ? 'SET' : 'NOT SET')
+  console.log('[Contact Page] Site key length:', turnstileSiteKey?.length || 0)
 
   return (
     <>
