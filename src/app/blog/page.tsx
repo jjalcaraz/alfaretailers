@@ -1,8 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
 import { ArrowRight, Calendar, Clock, Tag } from 'lucide-react'
 
 type Post = {
@@ -56,8 +54,6 @@ const posts: Post[] = [
 export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Header />
-
       <main className="pt-20 pb-16">
         {/* Hero */}
         <section className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white py-16">
@@ -122,8 +118,6 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

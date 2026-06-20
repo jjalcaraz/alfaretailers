@@ -214,4 +214,28 @@ export const pageMetadata: Record<string, Metadata> = {
       follow: true,
     },
   },
+  'privacy-policy': {
+    title: 'Privacy Policy - Alfa Retailers',
+    description:
+      'Alfa Retailers Privacy Policy — learn how we collect, use, and protect your personal information, including SMS consent data and mobile messaging.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'Privacy Policy - Alfa Retailers',
+      description: 'How Alfa Retailers collects, uses, and protects your personal information, including SMS consent.',
+      url: `${getBaseUrl()}/privacy-policy`,
+    },
+    robots: { index: true, follow: true },
+  },
+  'sms-terms': {
+    title: 'SMS Terms & Conditions - Alfa Retailers',
+    description:
+      'Alfa Retailers SMS Terms & Conditions — program description, opt-in/opt-out, message frequency, costs, and carrier information.',
+    openGraph: {
+      ...baseMetadata.openGraph,
+      title: 'SMS Terms & Conditions - Alfa Retailers',
+      description: 'SMS program terms, opt-out instructions, and carrier information for Alfa Retailers.',
+      url: `${getBaseUrl()}/sms-terms`,
+    },
+    robots: { index: true, follow: true },
+  },
 }

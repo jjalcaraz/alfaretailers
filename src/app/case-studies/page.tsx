@@ -1,8 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
 import { ArrowRight, Building2, Home, Hotel, TrendingUp } from 'lucide-react'
 
 const caseStudies = [
@@ -61,8 +59,6 @@ const icons = [Home, Building2, Hotel, TrendingUp]
 export default function CaseStudiesPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Header />
-
       <main className="pt-20">
         {/* Hero */}
         <section className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white py-16">
@@ -132,8 +128,6 @@ export default function CaseStudiesPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
 import { Home, DollarSign, Shield, Calendar, Users, FileText, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -116,8 +114,6 @@ export default function FAQ() {
 
   return (
     <div className="min-h-screen">
-      <Header />
-
       <main className="pt-20">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-brand-blue/5 to-brand-orange/5">
@@ -301,8 +297,6 @@ export default function FAQ() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

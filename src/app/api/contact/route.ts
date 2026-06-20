@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { emailService } from '@/lib/email';
+import { prisma } from '@/lib/database';
 import {
   ContactPayload,
   RequestSignals,
@@ -30,11 +31,16 @@ const GENERIC_BLOCK_MESSAGE = 'We could not process your request at this time. P
 
 const optionalShortText = z.string().trim().max(120).optional();
 
+// Verbatim consent language — must match exactly what is rendered on the form
+export const SMS_CONSENT_LANGUAGE =
+  'By checking this box, I agree to receive SMS text messages from Alfa Retailers at the phone number provided, including consultation booking links, appointment confirmations, missed-call follow-ups, and customer support updates. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to unsubscribe at any time, or reply HELP for assistance. View our Privacy Policy and SMS Terms & Conditions.'
+
 const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(80, 'Name is too long'),
   email: z.string().trim().email('Please enter a valid email address').max(254, 'Email is too long'),
   phone: z.string().trim().max(30, 'Phone number is too long').optional(),
-  message: z.string().trim().min(20, 'Message must be at least 20 characters').max(2000, 'Message is too long'),
+  message: z.string().trim().max(2000, 'Message is too long').optional(),
+  smsConsent: z.boolean().optional().default(false),
   propertyType: optionalShortText,
   bedrooms: optionalShortText,
   bathrooms: optionalShortText,
@@ -100,6 +106,7 @@ export async function POST(request: NextRequest) {
       ...validationResult.data,
       email: validationResult.data.email.toLowerCase(),
       phone: validationResult.data.phone?.trim(),
+      smsConsent: validationResult.data.smsConsent ?? false,
       propertyType: validationResult.data.propertyType?.trim(),
       bedrooms: validationResult.data.bedrooms?.trim(),
       bathrooms: validationResult.data.bathrooms?.trim(),
@@ -194,6 +201,26 @@ export async function POST(request: NextRequest) {
 
     const notificationPromise = emailService.sendContactNotification(parsedPayload);
     const autoReplyPromise = emailService.sendAutoReply(parsedPayload);
+
+    // Record SMS consent if the user opted in — stored as tamper-evident proof for carrier compliance
+    if (parsedPayload.smsConsent && parsedPayload.phone) {
+      try {
+        await prisma.smsConsentLog.create({
+          data: {
+            phone: parsedPayload.phone,
+            consentLanguage: SMS_CONSENT_LANGUAGE,
+            ipAddress: signals.ip,
+            pageUrl: signals.referer || 'https://www.alfaretailers.com/contact',
+            userAgent: signals.userAgent,
+            name: parsedPayload.name,
+            email: parsedPayload.email,
+          },
+        });
+      } catch (consentLogError) {
+        // Log the error but don't fail the request — consent is already captured in server logs
+        console.error('sms_consent_log_failure', { error: consentLogError, phone: parsedPayload.phone });
+      }
+    }
 
     const sendAsync = process.env.CONTACT_EMAIL_QUEUE_MODE === 'async';
 

@@ -19,7 +19,7 @@ export default function About() {
         }}
       />
       <div className="min-h-screen bg-gray-50">
-      <main>
+      <main className="pt-20">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-brand-blue/10 to-brand-orange/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

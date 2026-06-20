@@ -117,9 +117,7 @@ export default function RootLayout({
       <body className="font-sans">
         <GoogleAnalytics />
         <Header />
-        <main className="pt-20">
-          {children}
-        </main>
+        {children}
         <Footer />
       </body>
     </html>

@@ -17,7 +17,8 @@ export interface ContactPayload {
   name: string;
   email: string;
   phone?: string;
-  message: string;
+  message?: string;
+  smsConsent?: boolean;
   propertyType?: string;
   bedrooms?: string;
   bathrooms?: string;

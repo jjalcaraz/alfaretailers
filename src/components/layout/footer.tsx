@@ -250,10 +250,16 @@ export function Footer() {
             </div>
             <div className="flex flex-wrap items-center justify-center gap-8 text-base">
               <Link
-                href="/privacy"
+                href="/privacy-policy"
                 className="text-gray-300 hover:text-white transition-all duration-300 py-2 px-4 rounded-lg hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus:ring-offset-dark border border-transparent hover:border-white/10 font-medium"
               >
                 Privacy Policy
+              </Link>
+              <Link
+                href="/sms-terms"
+                className="text-gray-300 hover:text-white transition-all duration-300 py-2 px-4 rounded-lg hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus:ring-offset-dark border border-transparent hover:border-white/10 font-medium"
+              >
+                SMS Terms
               </Link>
               <Link
                 href="/terms"

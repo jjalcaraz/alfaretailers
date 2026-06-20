@@ -1,5 +1,3 @@
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ContactForm } from '@/components/forms/contact-form'
@@ -15,12 +13,7 @@ export default async function Contact() {
   const requestHeaders = headers()
   const userAgent = requestHeaders.get('user-agent') || 'unknown'
   const formAttestationToken = issueContactFormAttestationToken(userAgent)
-  // Turnstile site key from environment variable
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-  
-  // Debug: Log site key status (will be visible in build logs)
-  console.log('[Contact Page] Turnstile site key:', turnstileSiteKey ? 'SET' : 'NOT SET')
-  console.log('[Contact Page] Site key length:', turnstileSiteKey?.length || 0)
 
   return (
     <>
@@ -33,7 +26,6 @@ export default async function Contact() {
         }}
       />
       <div className="min-h-screen">
-      <Header />
 
       <main className="pt-20">
         {/* Hero Section */}
@@ -173,7 +165,6 @@ export default async function Contact() {
         </section>
       </main>
 
-      <Footer />
     </div>
     </>
   )

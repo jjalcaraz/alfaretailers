@@ -136,3 +136,19 @@ model PropertyPhoto {
 
   @@map("property_photos")
 }
+
+// SMS Consent Log — stores evidence of explicit opt-in for A2P / carrier compliance
+model SmsConsentLog {
+  id              String   @id @default(cuid())
+  phone           String                         // E.164 or user-entered number
+  consentLanguage String                         // Exact label text shown to user at time of opt-in
+  consentedAt     DateTime @default(now())
+  ipAddress       String
+  pageUrl         String
+  userAgent       String?
+  name            String?                        // Submitter name for cross-reference
+  email           String?                        // Submitter email for cross-reference
+
+  @@index([phone])
+  @@map("sms_consent_logs")
+}

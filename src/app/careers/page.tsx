@@ -1,8 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
 import { MapPin, Clock, ArrowRight } from 'lucide-react'
 
 type Role = {
@@ -42,8 +40,6 @@ const roles: Role[] = [
 export default function CareersPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Header />
-
       <main className="pt-20 pb-16">
         {/* Hero */}
         <section className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white py-16">
@@ -107,8 +103,6 @@ export default function CareersPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

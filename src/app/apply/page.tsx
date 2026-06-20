@@ -159,7 +159,7 @@ export default function Apply() {
   if (isSubmitted) {
     return (
       <div className="min-h-screen">
-        <main>
+        <main className="pt-20">
           <section className="py-20 bg-gradient-to-br from-brand-green/5 to-brand-blue/5">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
               <motion.div
@@ -238,7 +238,7 @@ export default function Apply() {
 
   return (
     <div className="min-h-screen">
-      <main>
+      <main className="pt-20">
         {/* Progress Bar */}
         <div className="bg-white border-b sticky top-16 z-40">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

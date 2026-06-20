@@ -1,8 +1,5 @@
 'use client'
 
-import { Header } from '@/components/layout/header'
-import { Footer } from '@/components/layout/footer'
-
 const sections = [
   {
     title: 'Services & Scope',
@@ -45,7 +42,6 @@ const sections = [
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Header />
       <main className="pt-20 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <section className="mb-12 text-center">
@@ -70,7 +66,6 @@ export default function TermsPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   )
 }
