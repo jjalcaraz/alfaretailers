@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { emailService } from '@/lib/email';
 import { prisma } from '@/lib/database';
+import { normalizePhone, handleWebFormOptIn } from '@/lib/sms';
 import {
   ContactPayload,
   RequestSignals,
@@ -114,6 +115,31 @@ export async function POST(request: NextRequest) {
       companyWebsite: validationResult.data.companyWebsite?.trim(),
     };
 
+    // Normalise phone to E.164 when provided.
+    // If the user checked SMS consent but provided an invalid number, reject early
+    // with a field-level error so the form can highlight the phone field.
+    let e164Phone: string | undefined;
+    if (parsedPayload.phone) {
+      const phoneResult = normalizePhone(parsedPayload.phone);
+      if (!phoneResult.ok) {
+        if (parsedPayload.smsConsent) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: 'Validation failed',
+              errors: [{ field: 'phone', message: phoneResult.error }],
+            },
+            { status: 400 },
+          );
+        }
+        // No consent checked — phone is optional, store as-entered
+        e164Phone = undefined;
+      } else {
+        e164Phone = phoneResult.e164;
+        parsedPayload = { ...parsedPayload, phone: e164Phone };
+      }
+    }
+
     const originValidation = validateOriginSignals(signals);
     if (!originValidation.ok) {
       recordBlocked(originValidation.reason);
@@ -208,12 +234,16 @@ export async function POST(request: NextRequest) {
       message: parsedPayload.message ?? '',
     });
 
-    // Record SMS consent if the user opted in — stored as tamper-evident proof for carrier compliance
-    if (parsedPayload.smsConsent && parsedPayload.phone) {
+    // ── SMS opt-in handling ──────────────────────────────────────────────────
+    // Only fires when smsConsent === true AND a valid E.164 number was provided.
+    // Writes consent log, records subscription state, sends confirmation SMS,
+    // and syncs the contact to GoHighLevel — all non-blocking on failure.
+    if (parsedPayload.smsConsent && e164Phone) {
+      // 1. Append-only consent log (proof of opt-in for carrier/regulatory audits)
       try {
         await prisma.smsConsentLog.create({
           data: {
-            phone: parsedPayload.phone,
+            phone: e164Phone,
             consentLanguage: SMS_CONSENT_LANGUAGE,
             ipAddress: signals.ip,
             pageUrl: signals.referer || 'https://www.alfaretailers.com/contact',
@@ -223,9 +253,19 @@ export async function POST(request: NextRequest) {
           },
         });
       } catch (consentLogError) {
-        // Log the error but don't fail the request — consent is already captured in server logs
-        console.error('sms_consent_log_failure', { error: consentLogError, phone: parsedPayload.phone });
+        console.error('sms_consent_log_failure', { error: consentLogError, phone: e164Phone });
       }
+
+      // 2. Subscription state + confirmation SMS + GHL sync (fire-and-forget, non-fatal)
+      void handleWebFormOptIn({
+        e164: e164Phone,
+        name: parsedPayload.name,
+        email: parsedPayload.email,
+        ipAddress: signals.ip,
+        userAgent: signals.userAgent,
+      }).catch((err) => {
+        console.error('sms_opt_in_flow_error', { error: err, phone: e164Phone });
+      });
     }
 
     const sendAsync = process.env.CONTACT_EMAIL_QUEUE_MODE === 'async';

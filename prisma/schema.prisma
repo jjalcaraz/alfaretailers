@@ -138,9 +138,10 @@ model PropertyPhoto {
 }
 
 // SMS Consent Log — stores evidence of explicit opt-in for A2P / carrier compliance
+// APPEND-ONLY: never update or delete rows; retained minimum 5 years
 model SmsConsentLog {
   id              String   @id @default(cuid())
-  phone           String                         // E.164 or user-entered number
+  phone           String                         // E.164 format e.g. +12105261401
   consentLanguage String                         // Exact label text shown to user at time of opt-in
   consentedAt     DateTime @default(now())
   ipAddress       String
@@ -151,4 +152,39 @@ model SmsConsentLog {
 
   @@index([phone])
   @@map("sms_consent_logs")
+}
+
+// SMS Subscription — tracks opt-in / opt-out state per E.164 phone number
+// One row per phone number; status changes are appended to SmsSubscriptionEvent
+model SmsSubscription {
+  id            String    @id @default(cuid())
+  phone         String    @unique               // E.164 format
+  status        String    @default("subscribed") // subscribed | unsubscribed
+  subscribedAt  DateTime?
+  unsubscribedAt DateTime?
+  updatedAt     DateTime  @updatedAt
+  source        String?                          // "web_form" | "inbound_start" | "inbound_stop" etc.
+
+  events        SmsSubscriptionEvent[]
+
+  @@index([status])
+  @@map("sms_subscriptions")
+}
+
+// Immutable audit trail of every opt-in / opt-out event per phone number
+model SmsSubscriptionEvent {
+  id             String   @id @default(cuid())
+  phone          String
+  event          String   // opted_in | opted_out | resubscribed
+  source         String   // web_form | inbound_stop | inbound_start | inbound_unstop | admin
+  keyword        String?  // raw inbound keyword that triggered the event
+  ipAddress      String?
+  userAgent      String?
+  occurredAt     DateTime @default(now())
+
+  subscription   SmsSubscription @relation(fields: [phone], references: [phone], onDelete: Cascade)
+
+  @@index([phone])
+  @@index([occurredAt])
+  @@map("sms_subscription_events")
 }
