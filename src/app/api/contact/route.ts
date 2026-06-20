@@ -32,7 +32,7 @@ const GENERIC_BLOCK_MESSAGE = 'We could not process your request at this time. P
 const optionalShortText = z.string().trim().max(120).optional();
 
 // Verbatim consent language — must match exactly what is rendered on the form
-export const SMS_CONSENT_LANGUAGE =
+const SMS_CONSENT_LANGUAGE =
   'By checking this box, I agree to receive SMS text messages from Alfa Retailers at the phone number provided, including consultation booking links, appointment confirmations, missed-call follow-ups, and customer support updates. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply STOP to unsubscribe at any time, or reply HELP for assistance. View our Privacy Policy and SMS Terms & Conditions.'
 
 const contactSchema = z.object({
