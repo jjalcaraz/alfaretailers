@@ -199,8 +199,14 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const notificationPromise = emailService.sendContactNotification(parsedPayload);
-    const autoReplyPromise = emailService.sendAutoReply(parsedPayload);
+    const notificationPromise = emailService.sendContactNotification({
+      ...parsedPayload,
+      message: parsedPayload.message ?? '',
+    });
+    const autoReplyPromise = emailService.sendAutoReply({
+      ...parsedPayload,
+      message: parsedPayload.message ?? '',
+    });
 
     // Record SMS consent if the user opted in — stored as tamper-evident proof for carrier compliance
     if (parsedPayload.smsConsent && parsedPayload.phone) {

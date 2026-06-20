@@ -443,7 +443,7 @@ function looksBase64Like(value: string): boolean {
 
 export function botScore(payload: ContactPayload): BotScoreResult {
   const name = payload.name.trim();
-  const message = payload.message.trim();
+  const message = (payload.message ?? '').trim();
 
   const messageVowelRatio = vowelRatio(message);
   const nameVowelRatio = vowelRatio(name);
@@ -594,7 +594,7 @@ export function storeQuarantineRecord(payload: ContactPayload, reason: string, s
     reason,
     emailHash: shortHash(payload.email.toLowerCase()),
     namePreview: sanitizePreview(payload.name, 80),
-    messagePreview: sanitizePreview(payload.message, 160),
+    messagePreview: sanitizePreview(payload.message ?? '', 160),
     botScore: scoreResult.score,
     botReasons: scoreResult.reasons,
     ipHash: shortHash(signals.ip),
@@ -631,7 +631,7 @@ export function buildLogContext(payload: ContactPayload, signals: RequestSignals
     emailHash: shortHash(payload.email.toLowerCase()),
     ipHash: shortHash(signals.ip),
     userAgentHash: shortHash(signals.userAgent || 'unknown'),
-    messageLength: payload.message.length,
+    messageLength: (payload.message ?? '').length,
     nameLength: payload.name.length,
     botScore: scoreResult?.score,
     botReasons: scoreResult?.reasons,
